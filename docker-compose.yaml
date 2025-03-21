@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:5.7
+    container_name: healthcare_db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: healthcare_chatbot
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - healthcare_network
+    ports:
+      - "8001:3306"
+    restart: always
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile  # Specify the Dockerfile for backend
+    container_name: healthcare_backend
+    depends_on:
+      - db  # Wait for MySQL container to start first
+    networks:
+      - healthcare_network
+    ports:
+      - "8000:8000"
+    restart: always
+
+  chatbot-ui:
+    build:
+      context: .
+      dockerfile: chatbot-ui/Dockerfile  # Specify the Dockerfile for frontend
+    container_name: healthcare_chatbot
+    networks:
+      - healthcare_network
+    ports:
+      - "8080:8080" 
+    restart: always
+
+networks:
+  healthcare_network:
+    driver: bridge
