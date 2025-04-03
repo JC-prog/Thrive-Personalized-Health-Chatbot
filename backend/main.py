@@ -1,8 +1,6 @@
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
-from passlib.context import CryptContext
 from typing import List
-import jwt
 
 app = FastAPI()
 
