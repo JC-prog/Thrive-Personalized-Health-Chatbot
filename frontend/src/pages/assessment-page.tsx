@@ -13,7 +13,16 @@ export type FormData = {
   exercises: boolean;
   bloodPressure: string;
   glucoseLevel: string;
+  cholesterol?: string;
+  bloodSugar?: string;
+  lifestyle?: {
+    smokes: string;
+    alcohol: string;
+    exercise: string;
+    diet: string;
+  };
 };
+
 
 const initialFormData: FormData = {
   name: "",

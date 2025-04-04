@@ -10,7 +10,7 @@ type Props = {
 
 const LifestyleStep = ({ next, prev, data, update }: Props) => {
   const [lifestyle, setLifestyle] = useState({
-    smoking: data.lifestyle?.smoking || '',
+    smokes: data.smokes ? 'yes' : 'no', // If smokes is boolean, convert it to 'yes' or 'no'
     alcohol: data.lifestyle?.alcohol || '',
     exercise: data.lifestyle?.exercise || '',
     diet: data.lifestyle?.diet || '',
@@ -22,85 +22,78 @@ const LifestyleStep = ({ next, prev, data, update }: Props) => {
   };
 
   const handleNext = () => {
-    update({ lifestyle });
+    update({
+      smokes: lifestyle.smokes === 'yes' ? true : false, // Convert 'yes'/'no' back to boolean
+      lifestyle, // Keep the lifestyle object unchanged
+    });
     next();
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-6 text-left">
-      <h2 className="text-2xl md:text-4xl font-bold text-gray-800 mb-4 bg-gradient-to-r from-indigo-600 to-blue-500 bg-clip-text text-transparent text-center">
-        Lifestyle Factors
+    <div className="text-center max-w-3xl mx-auto px-4 py-6">
+      <h2 className="text-2xl md:text-4xl font-bold text-gray-800 mb-6 bg-gradient-to-r from-indigo-600 to-blue-500 bg-clip-text text-transparent">
+        Lifestyle Information
       </h2>
-      <p className="text-gray-600 text-lg mb-10 text-center">
-        Tell us about your daily habits and lifestyle.
-      </p>
+      <p className="text-gray-600 mb-6">Please select your lifestyle habits.</p>
 
       <div className="space-y-6">
         {/* Smoking */}
         <div>
-          <label className="block text-gray-700 font-semibold mb-2">Smoking Status</label>
+          <label className="block text-gray-700 font-semibold mb-2">Do you smoke?</label>
           <select
-            name="smoking"
-            value={lifestyle.smoking}
+            name="smokes"
+            value={lifestyle.smokes}
             onChange={handleChange}
             className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
           >
-            <option value="">Select an option</option>
-            <option value="never">Never smoked</option>
-            <option value="former">Former smoker</option>
-            <option value="occasional">Occasional smoker</option>
-            <option value="regular">Regular smoker</option>
+            <option value="">Select</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
           </select>
         </div>
 
         {/* Alcohol */}
         <div>
-          <label className="block text-gray-700 font-semibold mb-2">Alcohol Consumption</label>
+          <label className="block text-gray-700 font-semibold mb-2">Do you drink alcohol?</label>
           <select
             name="alcohol"
             value={lifestyle.alcohol}
             onChange={handleChange}
             className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
           >
-            <option value="">Select an option</option>
-            <option value="none">None</option>
-            <option value="light">Light (1–2 drinks/week)</option>
-            <option value="moderate">Moderate (3–7 drinks/week)</option>
-            <option value="heavy">Heavy (8+ drinks/week)</option>
+            <option value="">Select</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
           </select>
         </div>
 
         {/* Exercise */}
         <div>
-          <label className="block text-gray-700 font-semibold mb-2">Physical Activity</label>
+          <label className="block text-gray-700 font-semibold mb-2">Do you exercise regularly?</label>
           <select
             name="exercise"
             value={lifestyle.exercise}
             onChange={handleChange}
             className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
           >
-            <option value="">Select an option</option>
-            <option value="sedentary">Sedentary (little to no exercise)</option>
-            <option value="light">Light (1–2 days/week)</option>
-            <option value="moderate">Moderate (3–5 days/week)</option>
-            <option value="active">Active (6–7 days/week)</option>
+            <option value="">Select</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
           </select>
         </div>
 
         {/* Diet */}
         <div>
-          <label className="block text-gray-700 font-semibold mb-2">Diet Quality</label>
+          <label className="block text-gray-700 font-semibold mb-2">Do you follow a specific diet?</label>
           <select
             name="diet"
             value={lifestyle.diet}
             onChange={handleChange}
             className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
           >
-            <option value="">Select an option</option>
-            <option value="poor">Poor (highly processed, sugary, fatty)</option>
-            <option value="fair">Fair (some healthy, some processed)</option>
-            <option value="good">Good (mostly whole foods)</option>
-            <option value="excellent">Excellent (plant-based, minimally processed)</option>
+            <option value="">Select</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
           </select>
         </div>
       </div>

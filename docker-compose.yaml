@@ -1,16 +1,14 @@
-version: '3.8'
-
 services:
   db:
     image: mysql:5.7
-    container_name: healthcare_db
+    container_name: thrive_db
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: healthcare_chatbot
     volumes:
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
-      - healthcare_network
+      - thrive_network
     ports:
       - "8001:3306"
     restart: always
@@ -19,26 +17,26 @@ services:
     build:
       context: .
       dockerfile: backend/Dockerfile  # Specify the Dockerfile for backend
-    container_name: healthcare_backend
+    container_name: thrive_backend
     depends_on:
       - db  # Wait for MySQL container to start first
     networks:
-      - healthcare_network
+      - thrive_network
     ports:
       - "8000:8000"
     restart: always
 
-  chatbot-ui:
+  frontend:
     build:
       context: .
-      dockerfile: chatbot-ui/Dockerfile  # Specify the Dockerfile for frontend
-    container_name: healthcare_chatbot
+      dockerfile: frontend/Dockerfile  # Specify the Dockerfile for frontend
+    container_name: thrive_chatbot
     networks:
-      - healthcare_network
+      - thrive_network
     ports:
-      - "8080:8080" 
+      - "5173:5173" 
     restart: always
 
 networks:
-  healthcare_network:
+  thrive_network:
     driver: bridge

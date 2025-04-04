@@ -113,7 +113,7 @@ const AuthPage = () => {
           </div>
           
           <div className="relative z-10">
-            <h1 className="text-4xl font-heading font-bold mb-4">Health Buddy</h1>
+            <h1 className="text-4xl font-heading font-bold mb-4">Thrive</h1>
             <p className="text-xl mb-8 text-indigo-100">Personalized health risk assessment and recommendations</p>
             <ul className="space-y-4">
               {[
@@ -140,7 +140,7 @@ const AuthPage = () => {
         {/* Auth Form */}
         <div className="w-full md:w-1/2 p-6 md:p-12">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-heading font-bold text-indigo-600 mb-2">Health Buddy</h1>
+            <h1 className="text-3xl font-heading font-bold text-indigo-600 mb-2">Join Us</h1>
             <p className="text-slate-500">Personalized health risk assessment</p>
           </div>
 

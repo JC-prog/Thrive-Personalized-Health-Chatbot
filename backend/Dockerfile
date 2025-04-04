@@ -1,20 +1,19 @@
-# Step 1: Use an official Python runtime as a parent image
-FROM python:3.9-slim
+# backend/Dockerfile
+FROM python:3.11-slim
 
-# Step 2: Set the working directory in the container
+# Set working directory
 WORKDIR /app
 
-# Step 3: Copy the requirements.txt into the container
-COPY backend/requirements.txt /app/
+# Install dependencies
+COPY backend/requirements.txt .
 
-# Step 4: Install the dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Step 5: Copy the entire backend app into the container
-COPY backend/ /app/
+# Copy the rest of the backend code
+COPY backend/ .
 
-# Step 6: Expose port 8000 for FastAPI
+# Expose port
 EXPOSE 8000
 
-# Step 7: Run the FastAPI app with uvicorn
+# Start the FastAPI server
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
