@@ -1,18 +1,22 @@
-import { useState } from 'react'
 import { Switch, Route } from 'wouter'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import { ProtectedRoute } from '@lib/protected-route'
 
 // Pages
 import AuthPage from "@pages/auth-page"
 import NotFound from '@pages/not-found-page'
+import TestPage from '@pages/test'
+import AssessmentPage from '@pages/assessment-page'
+import DashboardPage from '@pages/dashboard-page'
 
 function Router() {
   return (
     <Switch>
       <Route path="/auth" component={AuthPage} />
       <Route path="/not-found" component={NotFound} />
+      <Route path="/test" component={TestPage} />
+      <Route path="/assessment" component={AssessmentPage} />
+      <Route path="/" component={DashboardPage} />
     </Switch>
   );
 }

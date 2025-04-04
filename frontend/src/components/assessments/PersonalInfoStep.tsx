@@ -1,0 +1,78 @@
+import React from 'react';
+import { FormData } from '@pages/assessment-page';
+
+type Props = {
+  next: () => void;
+  prev: () => void;
+  data: FormData;
+  update: (newData: Partial<FormData>) => void;
+};
+
+const PersonalInfoStep = ({ next, prev, data, update }: Props) => (
+  <div className="text-center max-w-3xl mx-auto px-4 py-6">
+    <h2 className="text-2xl md:text-4xl font-bold text-gray-800 mb-6 bg-gradient-to-r from-indigo-600 to-blue-500 bg-clip-text text-transparent">
+      Personal Information
+    </h2>
+
+    <div className="space-y-6 mb-10 text-left">
+      {/* Name */}
+      <div>
+        <label className="block mb-2 text-gray-700 font-medium">Full Name</label>
+        <input
+          type="text"
+          value={data.name}
+          onChange={(e) => update({ name: e.target.value })}
+          className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none shadow-sm"
+          placeholder="Enter your full name"
+        />
+      </div>
+
+      {/* Age */}
+      <div>
+        <label className="block mb-2 text-gray-700 font-medium">Age</label>
+        <input
+          type="number"
+          value={data.age}
+          onChange={(e) => update({ age: parseInt(e.target.value) })}
+          className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none shadow-sm"
+          placeholder="Enter your age"
+          min={0}
+        />
+      </div>
+
+      {/* Gender */}
+      <div>
+        <label className="block mb-2 text-gray-700 font-medium">Gender</label>
+        <select
+          value={data.gender}
+          onChange={(e) => update({ gender: e.target.value })}
+          className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none shadow-sm"
+        >
+          <option value="">Select gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="non-binary">Non-binary</option>
+          <option value="prefer-not-to-say">Prefer not to say</option>
+        </select>
+      </div>
+    </div>
+
+    <div className="flex justify-between">
+      <button
+        className="px-6 py-3 bg-gray-300 text-gray-800 font-medium rounded-xl hover:bg-gray-400 transition-all"
+        onClick={prev}
+      >
+        Back
+      </button>
+
+      <button
+        className="px-8 py-4 bg-indigo-600 text-white font-medium rounded-xl shadow-md hover:bg-indigo-700 transition-all"
+        onClick={next}
+      >
+        Next
+      </button>
+    </div>
+  </div>
+);
+
+export default PersonalInfoStep;

@@ -1,6 +1,7 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
+from auth import create_access_token, get_current_user 
 
 app = FastAPI()
 
@@ -28,7 +29,7 @@ async def register_user(user: UserCreate, db: Session = Depends(get_db)):
     
     return new_user
 
-# User login
+# User login (Now returns JWT token)
 @app.post("/api/login")
 async def login(user: UserCreate, db: Session = Depends(get_db)):
     db_user = db.query(User).filter(User.username == user.username).first()
@@ -38,12 +39,12 @@ async def login(user: UserCreate, db: Session = Depends(get_db)):
     access_token = create_access_token(data={"sub": db_user.username})
     return {"access_token": access_token, "token_type": "bearer"}
 
-# User logout
+# User logout (Not much needed, just remove token on frontend)
 @app.post("/api/logout")
 async def logout():
     return {"message": "Logged out successfully"}
 
-# Get user details
+# Get user details (Protected route)
 @app.get("/api/user", response_model=UserResponse)
 async def get_user(current_user: str = Depends(get_current_user), db: Session = Depends(get_db)):
     db_user = db.query(User).filter(User.username == current_user).first()
@@ -52,7 +53,11 @@ async def get_user(current_user: str = Depends(get_current_user), db: Session = 
     
     return db_user
 
-# Dashboard
-@app.get("/")
-def read_root():
-    return {"message": "Hello, World!"}
+# Protect Dashboard with JWT validation (Sample route for protected area)
+@app.get("/dashboard")
+async def dashboard(current_user: str = Depends(get_current_user)):
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    return {"message": f"Welcome to the dashboard, {current_user}!"}
+
+# Dependency for getting the current user
