@@ -1,6 +1,7 @@
 services:
   db:
     image: mysql:5.7
+    platform: linux/amd64  
     container_name: thrive_db
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
