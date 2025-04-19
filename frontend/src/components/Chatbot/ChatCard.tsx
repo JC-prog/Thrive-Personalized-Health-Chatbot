@@ -29,7 +29,7 @@ const ChatCard = () => {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-6">
+    <div className="w-full mx-auto bg-white shadow-lg rounded-lg p-6">
       {/* Chat History */}
       <div className="space-y-4 max-h-[60vh] min-h-60 overflow-y-auto p-4 bg-gray-100 rounded-lg shadow-inner">
         {messages.map((message, index) => (

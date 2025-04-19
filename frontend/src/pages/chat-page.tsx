@@ -26,23 +26,17 @@ const Card = ({
   </div>
 );
 
-const DashboardContent = () => (
+const ChatbotContent = () => (
   <div className="flex-1 bg-slate-50 p-8 min-h-screen">
     <h1 className="text-3xl font-bold mb-6 text-slate-800">Chatbot</h1>
-
-    {/* Chart Placeholder */}
-    <div className="bg-white p-6 rounded-2xl shadow-md">
-      
-        <ChatCard />
-      
-    </div>
+    <ChatCard />
   </div>
 );
 
 const ChatPage = () => (
   <div className="flex font-sans">
     <Sidebar />
-    <DashboardContent />
+    <ChatbotContent />
   </div>
 );
 
