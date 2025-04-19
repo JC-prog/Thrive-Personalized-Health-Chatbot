@@ -28,14 +28,13 @@ const Card = ({
 
 const DashboardContent = () => (
   <div className="flex-1 bg-slate-50 p-8 min-h-screen">
-    <h1 className="text-3xl font-bold mb-6 text-slate-800">Chat</h1>
+    <h1 className="text-3xl font-bold mb-6 text-slate-800">Chatbot</h1>
 
     {/* Chart Placeholder */}
     <div className="bg-white p-6 rounded-2xl shadow-md">
-      <h2 className="text-xl font-semibold text-slate-800 mb-4">Weekly Activity Summary</h2>
-      <div className="w-full bg-slate-100 rounded-xl p-4">
+      
         <ChatCard />
-      </div>
+      
     </div>
   </div>
 );

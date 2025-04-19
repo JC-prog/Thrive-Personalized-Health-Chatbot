@@ -28,7 +28,7 @@ const Card = ({
 
 const DashboardContent = () => (
   <div className="flex-1 bg-slate-50 p-8 min-h-screen">
-    <h1 className="text-3xl font-bold mb-6 text-slate-800">Welcome back, John 👋</h1>
+    <h1 className="text-3xl font-bold mb-6 text-slate-800">Welcome back, John </h1>
 
     {/* Cards */}
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
