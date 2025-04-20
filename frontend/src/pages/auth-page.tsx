@@ -1,52 +1,13 @@
 import { useState, ChangeEvent, FormEvent, useEffect } from "react";
-
-interface FormData {
-  name: string;
-  email: string;
-  username: string;
-  password: string;
-  confirmPassword: string;
-}
-
-interface ToastProps {
-  message: string;
-  type: "success" | "error" | "info";
-  isVisible: boolean;
-}
-
-const Toast = ({ message, type, isVisible }: ToastProps) => {
-  const bgColor = 
-    type === "success" ? "bg-green-500" : 
-    type === "error" ? "bg-red-500" : 
-    "bg-blue-500";
-  
-  return (
-    <div className={`fixed top-4 right-4 z-50 transform transition-all duration-300 ${
-      isVisible ? "translate-y-0 opacity-100" : "-translate-y-12 opacity-0"
-    }`}>
-      <div className={`${bgColor} text-white px-6 py-4 rounded-lg shadow-lg flex items-center`}>
-        {type === "success" && (
-          <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-          </svg>
-        )}
-        {type === "error" && (
-          <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        )}
-        {type === "info" && (
-          <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-        )}
-        <span>{message}</span>
-      </div>
-    </div>
-  );
-};
+import AuthToast from "../components/Toast/AuthToast";
+import { FormData, ToastProps } from "../types/form";
+import { login, register } from "../api/auth-api";
+import { useAuth } from '../hooks/auth-context';
+import { useLocation } from "wouter";
 
 const AuthPage = () => {
+  const { loginContext} = useAuth();
+  const [location, setLocation] = useLocation();
   const [isSignIn, setIsSignIn] = useState(true);
   const [formData, setFormData] = useState<FormData>({
     name: "",
@@ -75,29 +36,56 @@ const AuthPage = () => {
     setFormData((prev) => ({ ...prev, [id]: value }));
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+  
     if (!formData.username || !formData.password) {
       showToast("Please fill in all required fields", "error");
       return;
     }
-    
+  
     if (!isSignIn && formData.password !== formData.confirmPassword) {
       showToast("Passwords do not match", "error");
       return;
     }
-    
-    showToast(
-      `${isSignIn ? "Successfully logged in" : "Account created successfully"}`, 
-      "success"
-    );
+  
+    try {
+      if (isSignIn) {
+        const res = await login({
+          username_or_email: formData.username,
+          password: formData.password,
+        });
+        loginContext(res.access_token); 
+        showToast("Successfully logged in", "success");
+        setLocation("/");
+
+      } else {
+        await register({
+          name: formData.name,
+          username: formData.username,
+          email: formData.email,
+          password: formData.password,
+        });
+        showToast("Account created successfully", "success");
+        setIsSignIn(true);
+      }
+    } catch (err: any) {
+      console.error("Error during authentication:", err);
+
+      const errorMessage = err.response?.data?.detail || 
+                          err.response?.data?.message || 
+                          err.message || 
+                          "Something went wrong";
+
+      showToast(errorMessage, "error");
+    }
   };
+  
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4 sm:p-6">
       {/* Toast Component */}
-      <Toast 
+      <AuthToast 
         message={toast.message} 
         type={toast.type} 
         isVisible={toast.isVisible} 

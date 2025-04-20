@@ -1,9 +1,26 @@
 from fastapi import FastAPI, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.middleware.cors import CORSMiddleware
 from . import models, schemas, crud, database, auth
+from app.chatbot.chatbot import generate_response
+from app.schemas import ChatRequest, ChatResponse
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],      
+)
+
 models.Base.metadata.create_all(bind=database.engine)
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -32,11 +49,12 @@ def login(user_data: schemas.UserLogin, db: Session = Depends(get_db)):
 
 @app.post("/register", response_model=schemas.UserOut)
 def register(user: schemas.UserCreate, db: Session = Depends(get_db)):
-    if crud.get_user_by_email(db, user.email):
-        raise HTTPException(status_code=400, detail="Email already registered")
-    if crud.get_user_by_username(db, user.username):
-        raise HTTPException(status_code=400, detail="Username already taken")
-    return crud.create_user(db, user)
+    user_creation_response = crud.create_user(db, user)
+
+    if "error" in user_creation_response:
+        raise HTTPException(status_code=400, detail=user_creation_response["error"])
+
+    return user_creation_response["user"]
 
 @app.post("/token", response_model=schemas.Token)
 def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
@@ -57,3 +75,8 @@ def read_users_me(token: str = Depends(oauth2_scheme), db: Session = Depends(get
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
     return user
+
+@app.post("/chat", response_model=ChatResponse)
+async def chat(request: ChatRequest):
+    reply = generate_response(request.message)
+    return ChatResponse(response=reply)
