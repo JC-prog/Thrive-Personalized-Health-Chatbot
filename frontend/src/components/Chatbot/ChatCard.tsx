@@ -5,16 +5,34 @@ const ChatCard = () => {
   const [input, setInput] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (input.trim()) {
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { text: input, type: 'user' },
-        { text: "This is a bot response", type: 'bot' } // Mocked bot response
-      ]);
-      setInput(""); // Clear input field
+      const userMessage = { text: input, type: "user" as const };
+      setMessages((prevMessages) => [...prevMessages, userMessage]);
+      setInput("");
+  
+      try {
+        const res = await fetch("http://localhost:8000/chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ message: input }),
+        });
+  
+        const data = await res.json();
+        const botMessage = { text: data.response, type: "bot" as const };
+        setMessages((prevMessages) => [...prevMessages, botMessage]);
+      } catch (error) {
+        const errorMsg = {
+          text: "Sorry, something went wrong. Please try again later.",
+          type: "bot" as const,
+        };
+        setMessages((prevMessages) => [...prevMessages, errorMsg]);
+      }
     }
   };
+  
 
   // Auto scroll to bottom when new message is added
   useEffect(() => {
