@@ -52,7 +52,7 @@ const AuthPage = () => {
     try {
       if (isSignIn) {
         const res = await login({
-          username_or_email: formData.username,
+          username: formData.username,
           password: formData.password,
         });
         loginContext(res.access_token); 

@@ -31,7 +31,9 @@ def create_user(db: Session, user_data):
     db.refresh(db_user)
     return {"user": db_user}
 
-
-
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
+
+# User Profile Retrieval
+def get_user_profile_by_username(db: Session, username: str):
+    return db.query(models.User).filter(models.User.username == username).first()

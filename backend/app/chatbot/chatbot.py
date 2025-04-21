@@ -6,6 +6,19 @@ from .models.distilbert import get_embedding
 from .models.utils import cosine_similarity
 
 def generate_response(user_input: str) -> str:
+    user_input = user_input.lower().strip()
+
+    intent = get_intent(user_input)
+
+    if intent == "greet":
+        return "Hello! How can I assist you with health-related questions?"
+    elif intent == "bye":
+        return "Take care! If you have more questions, feel free to come back."
+    elif intent == "predict_diabetes":
+        return "Sure! Please provide your age, BMI, glucose level, and other health metrics to assess diabetes risk."
+    elif intent == "predict_heart":
+        return "Got it. Please share your blood pressure, cholesterol levels, age, and smoking status for heart disease risk prediction."
+
     user_vector = get_embedding(user_input)
     best_score = -1
     best_response = "Sorry, I don’t understand."
@@ -37,3 +50,17 @@ def generate_and_save_embeddings(input_csv_path, output_csv_path):
     df['Embedding'] = embeddings
     df.to_csv(output_csv_path, index=False)
     print(f"✅ Embeddings saved to {output_csv_path}")
+
+def get_intent(user_input: str) -> str:
+    normalized = user_input.lower()
+
+    if any(greet in normalized for greet in ["hi", "hello", "hey"]):
+        return "greet"
+    elif any(bye in normalized for bye in ["bye", "goodbye", "see you"]):
+        return "bye"
+    elif "predict my risk" in normalized:
+        if "diabetes" in normalized:
+            return "predict_diabetes"
+        elif "heart disease" in normalized or "cardio" in normalized:
+            return "predict_heart"
+    return "embedding"

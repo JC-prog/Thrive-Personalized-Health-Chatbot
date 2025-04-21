@@ -1,8 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "@components/navigation/Sidebar";
 import { User } from 'lucide-react';
+import { UserProfileData } from "src/types/user";
+import { getProfile } from "../api/profile-api";
 
 const ProfileContent = () => {
+  const [userProfile, setUserProfile] = useState<UserProfileData | null>(null); 
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const data = await getProfile();
+        setUserProfile(data);
+      } catch (err: any) {
+        setError(err.message || "Failed to load profile");
+      }
+    };
+
+    fetchProfile();
+  }, []);
+
   return (
     <div className="flex-1 bg-slate-50 p-8 min-h-screen">
       <h1 className="text-3xl font-bold mb-6 text-slate-800">Profile</h1>
@@ -15,23 +33,27 @@ const ProfileContent = () => {
             </div>
 
             <div className="flex-1">
-                <h2 className="text-2xl font-semibold text-slate-800 mb-2">John Doe</h2>
+                <h2 className="text-2xl font-semibold text-slate-800 mb-2">{userProfile?.name}</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                    <h4 className="text-sm text-slate-600">Email</h4>
-                    <p className="text-base font-medium text-slate-800">john@example.com</p>
+                      <h4 className="text-sm text-slate-600">Username</h4>
+                      <p className="text-base font-medium text-slate-800">{userProfile?.username}</p>
                     </div>
                     <div>
-                    <h4 className="text-sm text-slate-600">Phone</h4>
-                    <p className="text-base font-medium text-slate-800">+65 9123 4567</p>
+                      <h4 className="text-sm text-slate-600">Email</h4>
+                      <p className="text-base font-medium text-slate-800">{userProfile?.email}</p>
                     </div>
                     <div>
-                    <h4 className="text-sm text-slate-600">Age</h4>
-                    <p className="text-base font-medium text-slate-800">30</p>
+                      <h4 className="text-sm text-slate-600">Phone</h4>
+                      <p className="text-base font-medium text-slate-800">{userProfile?.phone_number ?? "-"}</p>
                     </div>
                     <div>
-                    <h4 className="text-sm text-slate-600">Gender</h4>
-                    <p className="text-base font-medium text-slate-800">Male</p>
+                      <h4 className="text-sm text-slate-600">Age</h4>
+                      <p className="text-base font-medium text-slate-800">30</p>
+                    </div>
+                    <div>
+                      <h4 className="text-sm text-slate-600">Gender</h4>
+                      <p className="text-base font-medium text-slate-800">Male</p>
                     </div>
                 </div>
                 </div>
