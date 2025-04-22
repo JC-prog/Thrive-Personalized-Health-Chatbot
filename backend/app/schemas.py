@@ -36,6 +36,19 @@ class ChatResponse(BaseModel):
 class UserProfileGeneralDataOut(BaseModel):
     age: Optional[int]
     phone_number: Optional[str]
+    gender: Optional[str]
+
+    class Config:
+        orm_mode = True
+
+class UserProfileClinicalMeasurementOut(BaseModel):
+    height: Optional[int]
+    weight: Optional[int]
+    bmi: Optional[int]
+    systolic_bp: Optional[int]
+    diastolic_bp: Optional[int]
+    glucose_level: Optional[int]
+    cholesterol_total: Optional[int]
 
     class Config:
         orm_mode = True
@@ -46,6 +59,9 @@ class UserProfileOut(BaseModel):
     username: str
     email: str
     general_data: Optional[UserProfileGeneralDataOut] = None
+    clinical_measurement: Optional[UserProfileClinicalMeasurementOut] = None
 
     class Config:
         orm_mode = True
+
+

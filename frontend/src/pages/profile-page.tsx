@@ -45,15 +45,15 @@ const ProfileContent = () => {
                     </div>
                     <div>
                       <h4 className="text-sm text-slate-600">Phone</h4>
-                      <p className="text-base font-medium text-slate-800">{userProfile?.phone_number ?? "-"}</p>
+                      <p className="text-base font-medium text-slate-800">{userProfile?.general_data?.phone_number ?? "-"}</p>
                     </div>
                     <div>
                       <h4 className="text-sm text-slate-600">Age</h4>
-                      <p className="text-base font-medium text-slate-800">30</p>
+                      <p className="text-base font-medium text-slate-800">{userProfile?.general_data?.age ?? "-"}</p>
                     </div>
                     <div>
                       <h4 className="text-sm text-slate-600">Gender</h4>
-                      <p className="text-base font-medium text-slate-800">Male</p>
+                      <p className="text-base font-medium text-slate-800">{userProfile?.general_data?.gender ?? "-"}</p>
                     </div>
                 </div>
                 </div>
@@ -72,12 +72,12 @@ const ProfileContent = () => {
             <div>
                 <h2 className="text-2xl font-semibold text-slate-800 mb-2">Clinical Measurement</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div><h4 className="text-sm text-slate-600">Height</h4><p className="text-base font-medium text-slate-800">120/80</p></div>
-                    <div><h4 className="text-sm text-slate-600">Weight</h4><p className="text-base font-medium text-slate-800">22.5</p></div>
-                    <div><h4 className="text-sm text-slate-600">Blood Pressure</h4><p className="text-base font-medium text-slate-800">120/80</p></div>
-                    <div><h4 className="text-sm text-slate-600">BMI</h4><p className="text-base font-medium text-slate-800">22.5</p></div>
-                    <div><h4 className="text-sm text-slate-600">Glucose</h4><p className="text-base font-medium text-slate-800">120/80</p></div>
-                    <div><h4 className="text-sm text-slate-600">Cholesterol</h4><p className="text-base font-medium text-slate-800">22.5</p></div>
+                    <div><h4 className="text-sm text-slate-600">Height</h4><p className="text-base font-medium text-slate-800">{userProfile?.clinical_measurement?.height ?? "-"}</p></div>
+                    <div><h4 className="text-sm text-slate-600">Weight</h4><p className="text-base font-medium text-slate-800">{userProfile?.clinical_measurement?.weight ?? "-"}</p></div>
+                    <div><h4 className="text-sm text-slate-600">Blood Pressure</h4><p className="text-base font-medium text-slate-800">{userProfile?.clinical_measurement?.systolic_bp ?? "-"}/{userProfile?.clinical_measurement?.diastolic_bp ?? "-"}</p></div>
+                    <div><h4 className="text-sm text-slate-600">BMI</h4><p className="text-base font-medium text-slate-800">{userProfile?.clinical_measurement?.bmi ?? "-"}</p></div>
+                    <div><h4 className="text-sm text-slate-600">Glucose</h4><p className="text-base font-medium text-slate-800">{userProfile?.clinical_measurement?.glucose_level ?? "-"}</p></div>
+                    <div><h4 className="text-sm text-slate-600">Cholesterol</h4><p className="text-base font-medium text-slate-800">{userProfile?.clinical_measurement?.cholesterol_total ?? "-"}</p></div>
                 </div>
             </div>
 

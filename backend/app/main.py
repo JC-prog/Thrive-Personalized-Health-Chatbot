@@ -1,3 +1,6 @@
+import os
+import pickle
+
 from fastapi import FastAPI, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -5,6 +8,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from . import models, schemas, crud, database, auth
 from app.chatbot.chatbot import generate_response
 from app.schemas import ChatRequest, ChatResponse
+from app.prediction_models import prediction
+
 
 app = FastAPI()
 
@@ -30,6 +35,14 @@ def get_db():
         yield db
     finally:
         db.close()
+
+# Build the absolute path to the model file
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(BASE_DIR, "best_random_forest_pipeline.pkl")
+
+# Load the model
+with open(MODEL_PATH, "rb") as f:
+    model = pickle.load(f)
 
 @app.post("/login", response_model=schemas.Token)
 def login(user_data: schemas.UserLogin, db: Session = Depends(get_db)):
@@ -81,3 +94,11 @@ async def chat(request: ChatRequest):
     reply = generate_response(request.message)
     return ChatResponse(response=reply)
 
+@app.get("/predict/{user_id}")
+def predict_user_health(user_id: int, db: Session = Depends(get_db)):
+
+    pred = prediction.predict_heart_risk(db, user_id, model)
+
+    return {
+        pred
+    }
