@@ -11,6 +11,7 @@ def predict_heart_risk(db: Session, user_id: int, model):
 
     bmi = clinical.weight / (clinical.height ** 2)
     gender = gender_category(general.gender)
+    cholesterol = cholesterol_category(clinical.cholesterol_total)
     data = {
         "age": general.age,
         "height": clinical.height,
@@ -18,8 +19,8 @@ def predict_heart_risk(db: Session, user_id: int, model):
         "gender": gender,
         "ap_hi": clinical.systolic_bp,
         "ap_lo": clinical.diastolic_bp,
-        "cholesterol": clinical.cholesterol_total,
-        "gluc": clinical.glucose_level,
+        "cholesterol": cholesterol,
+        "gluc": 1,
         "smoke": lifestyle.smoking,
         "alco": lifestyle.alcohol,
         "active": lifestyle.active_lifestyle,
@@ -28,9 +29,19 @@ def predict_heart_risk(db: Session, user_id: int, model):
     }
 
     df = pd.DataFrame([data])
+
+    print(df.head())
+
     risk_score = model.predict_proba(df)[0][1]
 
     return risk_score
+
+def predict_diabetes_risk(db: Session, user_id: int, model):
+
+    
+
+    return risk_score
+
 
 def bmi_category(bmi):
     if bmi < 18.5:
@@ -52,6 +63,14 @@ def bp_category(sys, dia):
 
 def gender_category(gender):
     if gender.lower() == "male":
+        return 1
+    else:
+        return 2
+
+def cholesterol_category(cholesterol):
+    if cholesterol < 200:
+        return 0
+    elif cholesterol < 240:
         return 1
     else:
         return 2

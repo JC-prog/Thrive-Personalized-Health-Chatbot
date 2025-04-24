@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from . import models, schemas, crud, database, auth
 from app.chatbot.chatbot import generate_response
 from app.schemas import ChatRequest, ChatResponse
-from app.prediction_models import prediction
+from app.prediction_models.heart_prediction import HeartRiskPredictor
 
 
 app = FastAPI()
@@ -97,8 +97,7 @@ async def chat(request: ChatRequest):
 @app.get("/predict/{user_id}")
 def predict_user_health(user_id: int, db: Session = Depends(get_db)):
 
-    pred = prediction.predict_heart_risk(db, user_id, model)
+    predictor = HeartRiskPredictor(db, model)
+    risk_score = predictor.predict(user_id)
 
-    return {
-        pred
-    }
+    return {"user_id": user_id, "heart_disease_risk_score": risk_score}
