@@ -15,18 +15,6 @@ const PersonalInfoStep = ({ next, prev, data, update }: Props) => (
     </h2>
 
     <div className="space-y-6 mb-10 text-left">
-      {/* Name */}
-      <div>
-        <label className="block mb-2 text-gray-700 font-medium">Full Name</label>
-        <input
-          type="text"
-          value={data.name}
-          onChange={(e) => update({ name: e.target.value })}
-          className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none shadow-sm"
-          placeholder="Enter your full name"
-        />
-      </div>
-
       {/* Age */}
       <div>
         <label className="block mb-2 text-gray-700 font-medium">Age</label>
@@ -51,8 +39,39 @@ const PersonalInfoStep = ({ next, prev, data, update }: Props) => (
           <option value="">Select gender</option>
           <option value="male">Male</option>
           <option value="female">Female</option>
-          <option value="non-binary">Non-binary</option>
-          <option value="prefer-not-to-say">Prefer not to say</option>
+        </select>
+      </div>
+
+      {/* Education */}
+      <div>
+        <label className="block mb-2 text-gray-700 font-medium">Education</label>
+        <select
+          value={data.gender}
+          onChange={(e) => update({ gender: e.target.value })}
+          className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none shadow-sm"
+        >
+          <option value="">Select Education</option>
+          <option value="male">Never attended school</option>
+          <option value="female">Primary School</option>
+          <option value="non-binary">Secondary School</option>
+          <option value="female">Junior College</option>
+          <option value="non-binary">Polytechnic</option>
+          <option value="prefer-not-to-say">Graduated from University</option>
+        </select>
+      </div>
+
+
+    {/* Insurance */}
+    <div>
+        <label className="block mb-2 text-gray-700 font-medium">Do you have insurance?</label>
+        <select
+          value={data.gender}
+          onChange={(e) => update({ gender: e.target.value })}
+          className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none shadow-sm"
+        >
+          <option value="">Select gender</option>
+          <option value="male">Yes</option>
+          <option value="female">No</option>
         </select>
       </div>
     </div>

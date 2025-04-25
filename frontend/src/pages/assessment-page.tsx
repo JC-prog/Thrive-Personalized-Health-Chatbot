@@ -52,7 +52,15 @@ const AssessmentPage = () => {
     <CompleteStep  next={next} prev={prev} data={formData} update={updateForm} />
   ];
 
-  return <div className="max-w-xl mx-auto p-4">{steps[step]}</div>;
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4 sm:p-6">
+      {/* Toast Component */}
+
+      <div className="w-full max-w-5xl flex flex-col md:flex-row bg-white rounded-2xl shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl">
+        {steps[step]}
+      </div>
+    </div>
+  )
 };
 
 export default AssessmentPage;
