@@ -5,33 +5,39 @@ import LifestyleStep from "@components/assessments/LifestyleStep";
 import HealthMetricStep from "@components/assessments/HealthMetricsStep";
 import CompleteStep from "@components/assessments/CompleteStep"
 
-export type FormData = {
-  name: string;
-  age: number;
-  gender: string;
-  smokes: boolean;
-  exercises: boolean;
-  bloodPressure: string;
-  glucoseLevel: string;
-  cholesterol?: string;
-  bloodSugar?: string;
-  lifestyle?: {
-    smokes: string;
-    alcohol: string;
-    exercise: string;
-    diet: string;
-  };
+export interface FormData
+{
+    id: number;
+    name: string;
+    username: string;
+    email: string;
+    general_data: {
+      age: number;
+      phone_number: string;
+      gender: string;
+      income: number;
+    };
+    clinical_measurement: {
+        height: number;
+        weight: number;
+        bmi: number;
+        systolic_bp: number;
+        diastolic_bp: number;
+        glucose_level: number;
+        cholesterol_total: number;
+    };
+    lifestyle: {
+      smoking: number;
+      alcohol: number;
+      exercise: number;
+      vegetable: number;
+      fruits: number;
+    }
 };
 
 
 const initialFormData: FormData = {
-  name: "",
-  age: 0,
-  gender: "",
-  smokes: false,
-  exercises: false,
-  bloodPressure: "",
-  glucoseLevel: "",
+  name: ""
 };
 
 const AssessmentPage = () => {

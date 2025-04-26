@@ -8,6 +8,7 @@ export interface UserProfileData
       age: number;
       phone_number: string;
       gender: string;
+      income: number;
     };
     clinical_measurement: {
         height: number;
@@ -17,5 +18,12 @@ export interface UserProfileData
         diastolic_bp: number;
         glucose_level: number;
         cholesterol_total: number;
+    };
+    lifestyle: {
+      smoking: number;
+      alcohol: number;
+      exercise: number;
+      vegetable: number;
+      fruits: number;
     }
 }

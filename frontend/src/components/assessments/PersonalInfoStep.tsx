@@ -62,7 +62,7 @@ const PersonalInfoStep = ({ next, prev, data, update }: Props) => (
 
 
     {/* Insurance */}
-    <div>
+      <div>
         <label className="block mb-2 text-gray-700 font-medium">Do you have insurance?</label>
         <select
           value={data.gender}
@@ -74,6 +74,35 @@ const PersonalInfoStep = ({ next, prev, data, update }: Props) => (
           <option value="female">No</option>
         </select>
       </div>
+
+      {/* Income */}
+      <div>
+        <label className="block mb-2 text-gray-700 font-medium">What’s your income level?</label>
+        <div className="space-y-2">
+        {[
+          "Less than $10,000",
+          "Less than $15,000 ($10,000 to less than $15,000)",
+          "Less than $20,000 ($15,000 to less than $20,000)",
+          "Less than $25,000 ($20,000 to less than $25,000)",
+          "Less than $50,000 ($35,000 to less than $50,000)",
+          "Less than $75,000 ($50,000 to less than $75,000)",
+          "$75,000 or more",
+        ].map((label, idx) => (
+          <label key={idx} className="flex items-center space-x-3">
+            <input
+              type="radio"
+              name="income"
+              value={idx + 1}
+              checked={data.general_data?.income === idx + 1}
+              onChange={(e) => update({ income: parseInt(e.target.value) })}
+              className="form-radio h-4 w-4 text-indigo-600"
+            />
+            <span className="text-gray-700">{label}</span>
+          </label>
+        ))}
+      </div>
+      </div>
+
     </div>
 
     <div className="flex justify-between">

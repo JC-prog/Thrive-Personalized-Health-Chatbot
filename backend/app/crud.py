@@ -1,18 +1,18 @@
 from sqlalchemy.orm import Session
-from . import prediction_models
+from . import models
 from passlib.context import CryptContext
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def get_user_by_email(db: Session, email: str):
-    return db.query(prediction_models.User).filter(prediction_models.User.email == email).first()
+    return db.query(models.User).filter(models.User.email == email).first()
 
 def get_user_by_username(db: Session, username: str):
-    return db.query(prediction_models.User).filter(prediction_models.User.username == username).first()
+    return db.query(models.User).filter(models.User.username == username).first()
 
 def create_user(db: Session, user_data):
-    existing_user_by_email = db.query(prediction_models.User).filter(prediction_models.User.email == user_data.email).first()
-    existing_user_by_username = db.query(prediction_models.User).filter(prediction_models.User.username == user_data.username).first()
+    existing_user_by_email = db.query(models.User).filter(models.User.email == user_data.email).first()
+    existing_user_by_username = db.query(models.User).filter(models.User.username == user_data.username).first()
 
     if existing_user_by_email:
         return {"error": "Email already registered"}
@@ -20,7 +20,7 @@ def create_user(db: Session, user_data):
         return {"error": "Username already taken"}
 
     hashed_password = pwd_context.hash(user_data.password)
-    db_user = prediction_models.User(
+    db_user = models.User(
         username=user_data.username,
         email=user_data.email,
         name=user_data.name,
@@ -36,4 +36,4 @@ def verify_password(plain_password, hashed_password):
 
 # User Profile Retrieval
 def get_user_profile_by_username(db: Session, username: str):
-    return db.query(prediction_models.User).filter(prediction_models.User.username == username).first()
+    return db.query(models.User).filter(models.User.username == username).first()

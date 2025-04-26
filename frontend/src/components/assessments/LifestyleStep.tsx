@@ -10,21 +10,27 @@ type Props = {
 
 const LifestyleStep = ({ next, prev, data, update }: Props) => {
   const [lifestyle, setLifestyle] = useState({
-    smokes: data.smokes ? 'yes' : 'no', // If smokes is boolean, convert it to 'yes' or 'no'
-    alcohol: data.lifestyle?.alcohol || '',
-    exercise: data.lifestyle?.exercise || '',
-    diet: data.lifestyle?.diet || '',
+    smoking: data.lifestyle?.smoking || 0,
+    alcohol: data.lifestyle?.alcohol || 0,
+    exercise: data.lifestyle?.exercise || 0,
+    vegetable: data.lifestyle?.vegetable || 0,
+    fruits: data.lifestyle?.fruits || 0
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setLifestyle(prev => ({ ...prev, [name]: value }));
+    setLifestyle(prev => ({
+      ...prev,
+      [name]: ['vegetable', 'fruits', 'alcohol'].includes(name)
+        ? Number(value) 
+        : value
+    }));
   };
+  
 
   const handleNext = () => {
     update({
-      smokes: lifestyle.smokes === 'yes' ? true : false, // Convert 'yes'/'no' back to boolean
-      lifestyle, // Keep the lifestyle object unchanged
+      lifestyle
     });
     next();
   };
@@ -42,13 +48,13 @@ const LifestyleStep = ({ next, prev, data, update }: Props) => {
           <label className="block text-gray-700 font-semibold mb-2">Do you smoke?</label>
           <select
             name="smokes"
-            value={lifestyle.smokes}
+            value={lifestyle.smoking}
             onChange={handleChange}
             className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
           >
             <option value="">Select</option>
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
           </select>
         </div>
 
@@ -62,8 +68,8 @@ const LifestyleStep = ({ next, prev, data, update }: Props) => {
             className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
           >
             <option value="">Select</option>
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
           </select>
         </div>
 
@@ -77,23 +83,37 @@ const LifestyleStep = ({ next, prev, data, update }: Props) => {
             className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
           >
             <option value="">Select</option>
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
           </select>
         </div>
 
         {/* Diet */}
         <div>
-          <label className="block text-gray-700 font-semibold mb-2">Do you follow a specific diet?</label>
+          <label className="block text-gray-700 font-semibold mb-2">Do you eat vegetables regulary?</label>
           <select
             name="diet"
-            value={lifestyle.diet}
+            value={lifestyle.vegetable}
             onChange={handleChange}
             className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
           >
             <option value="">Select</option>
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-gray-700 font-semibold mb-2">Do you eat fruits regulary?</label>
+          <select
+            name="diet"
+            value={lifestyle.fruits}
+            onChange={handleChange}
+            className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
+          >
+            <option value="">Select</option>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
           </select>
         </div>
       </div>
