@@ -5,7 +5,7 @@ from .embeddings import load_embeddings
 from .models.distilbert import get_embedding
 from .models.utils import cosine_similarity
 
-def generate_response(user_input: str) -> str:
+def generate_response(user_id: int, user_input: str) -> str:
     user_input = user_input.lower().strip()
 
     intent = get_intent(user_input)
@@ -15,9 +15,18 @@ def generate_response(user_input: str) -> str:
     elif intent == "bye":
         return "Take care! If you have more questions, feel free to come back."
     elif intent == "predict_diabetes":
-        return "Sure! Please provide your age, BMI, glucose level, and other health metrics to assess diabetes risk."
+
+        predictor = DiabetesRiskPredictor(db, model)
+        risk_score = predictor.predict(user_id)
+
+        return "Your Diabetes Risk Score is: {}".format(risk_score)
+
     elif intent == "predict_heart":
-        return "Got it. Please share your blood pressure, cholesterol levels, age, and smoking status for heart disease risk prediction."
+
+        predictor = HeartRiskPredictor(db, model)
+        risk_score = predictor.predict(user_id)
+
+        return "Your Heart Disease Risk Score is: {}".format(risk_score)
 
     user_vector = get_embedding(user_input)
     best_score = -1

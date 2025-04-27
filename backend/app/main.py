@@ -111,8 +111,14 @@ def update_user(
     return {"user": user}  
 
 @app.post("/chat", response_model=ChatResponse)
-async def chat(request: ChatRequest):
-    reply = generate_response(request.message)
+async def chat(request: ChatRequest, token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+    payload = auth.decode_token(token)
+
+    username = payload.get("sub")
+    print(payload)
+    user = crud.get_user_by_username(db, username)
+
+    reply = generate_response(user.user_id, request.message)
     return ChatResponse(response=reply)
 
 @app.get("/predict/{user_id}")
