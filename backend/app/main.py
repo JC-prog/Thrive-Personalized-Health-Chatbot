@@ -44,11 +44,25 @@ MODEL_PATH = os.path.join(BASE_DIR, "best_random_forest_pipeline.pkl")
 with open(MODEL_PATH, "rb") as f:
     model = pickle.load(f)
 
-@app.post("/login", response_model=schemas.Token)
-def login(user_data: schemas.UserLogin, db: Session = Depends(get_db)):
+# Register API
+@app.post("/register", response_model=schemas.UserRegisterOutput)
+def register(user: schemas.UserRegisterInput, db: Session = Depends(get_db)):
+    user_creation_response = crud.create_user(db, user)
+
+    if "error" in user_creation_response:
+        raise HTTPException(status_code=400, detail=user_creation_response["error"])
+
+    return user_creation_response["user"]
+
+# Login API
+@app.post("/login", response_model=schemas.UserLoginOutput)
+def login(user_data: schemas.UserLoginInput, db: Session = Depends(get_db)):
     user = crud.get_user_by_username(db, user_data.username)
     if not user:
-        user = crud.get_user_by_username(db, user_data.username_or_email)
+        raise HTTPException(
+            status_code=status.HTTP_404_NOTFOUND,
+            detail="User is not registered"
+        )
     if not user or not auth.verify_password(user_data.password, user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -59,23 +73,33 @@ def login(user_data: schemas.UserLogin, db: Session = Depends(get_db)):
     access_token = auth.create_access_token(token_data)
     return {"access_token": access_token, "token_type": "bearer"}
 
-@app.post("/register", response_model=schemas.UserOut)
-def register(user: schemas.UserCreate, db: Session = Depends(get_db)):
-    user_creation_response = crud.create_user(db, user)
+# Update User API
+@app.post("/updateUser", response_model=schemas.UserUpdateOutput)
+def update_user(
+    user_data: schemas.UserUpdateInput,
+    token: str = Depends(oauth2_scheme), 
+    db: Session = Depends(get_db), 
+):
+    payload = auth.decode_token(token)
+    if payload is None:
+        raise HTTPException(status_code=401, detail="Invalid token")
+    
+    username = payload.get("sub")
+    if not username:
+        raise HTTPException(status_code=401, detail="Token does not contain a valid username")
 
-    if "error" in user_creation_response:
-        raise HTTPException(status_code=400, detail=user_creation_response["error"])
+    user = crud.get_user_by_username(db, username)
+    
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
 
-    return user_creation_response["user"]
+    crud.update_user(db, user.id, user_data)
 
-@app.post("/token", response_model=schemas.Token)
-def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
-    user = crud.get_user_by_username(db, form_data.username)
-    if not user or not crud.verify_password(form_data.password, user.hashed_password):
-        raise HTTPException(status_code=401, detail="Invalid credentials")
+    return {
+        "status": "success",
+        "message": "User updated successfully"
+    }
 
-    access_token = auth.create_access_token(data={"sub": user.email})
-    return {"access_token": access_token, "token_type": "bearer"}
 
 @app.get("/me", response_model=schemas.UserProfileOut)
 def read_users_me(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
@@ -89,26 +113,7 @@ def read_users_me(token: str = Depends(oauth2_scheme), db: Session = Depends(get
         raise HTTPException(status_code=404, detail="User not found")
     return user
 
-@app.post("/updateUser")
-def update_user(
-    user_data: schemas.UserProfileUpdateData,
-    token: str = Depends(oauth2_scheme), 
-    db: Session = Depends(get_db), 
-):
-    payload = auth.decode_token(token)
-    if payload is None:
-        raise HTTPException(status_code=401, detail="Invalid token")
-    
-    username = payload.get("sub")
-    if not username:
-        raise HTTPException(status_code=401, detail="Token does not contain a valid username")
 
-    user = crud.update_user(db, username, user_data.dict())  
-    
-    if user is None:
-        raise HTTPException(status_code=404, detail="User not found")
-
-    return {"user": user}  
 
 @app.post("/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest, token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):

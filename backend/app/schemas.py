@@ -1,14 +1,15 @@
 from pydantic import BaseModel, EmailStr,  conint, confloat, constr
 from typing import Optional, Dict
 
-# Authentication
-class UserCreate(BaseModel):
+# User Registration Input
+class UserRegisterInput(BaseModel):
     username: str
     email: EmailStr
     name: str
     password: str
 
-class UserOut(BaseModel):
+# User Registration Output
+class UserRegisterOutput(BaseModel):
     id: int
     username: str
     email: EmailStr
@@ -17,13 +18,43 @@ class UserOut(BaseModel):
     class Config:
         orm_mode = True
 
-class UserLogin(BaseModel):
+# User Login Input
+class UserLoginInput(BaseModel):
     username: str
     password: str
 
-class Token(BaseModel):
+# User Login Output
+class UserLoginOutput(BaseModel):
     access_token: str
     token_type: str
+
+# User Update Input
+class UserUpdateInput(BaseModel):
+    age: int
+    gender: int
+    education: int
+    healthcare: int
+    income: int
+    smoking: int
+    alcohol: int
+    active_lifestyle: int
+    vegetables: int
+    fruits: int
+    height: float
+    weight: float
+    systolic_bp: int
+    diastolic_bp: int
+    glucose_level: int
+    cholesterol_total: int
+    heart_history: int
+    stroke: int
+    disability: int
+
+# User Update Output
+class UserUpdateOutput(BaseModel):
+    status: str
+    message: str
+
 
 # Chatbot
 class ChatRequest(BaseModel):

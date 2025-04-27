@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, Float, String, ForeignKey
+from sqlalchemy import Column, DateTime, Boolean, Integer, Float, String, ForeignKey
 from sqlalchemy.orm import relationship
 from .database import Base
 
@@ -10,6 +10,8 @@ class User(Base):
     username = Column(String(255), unique=True, nullable=False)
     email = Column(String(255), unique=True, index=True, nullable=False)
     hashed_password = Column(String(255), nullable=False)
+    assessment_done = Column(Boolean, default=False, nullable=False)
+    assessment_done_at = Column(DateTime, nullable=True)
 
     general_data = relationship("UserGeneralData", back_populates="user", uselist=False)
     clinical_measurement = relationship("UserClinicalMeasurement", back_populates="user", uselist=False)
@@ -23,7 +25,7 @@ class UserGeneralData(Base):
     id = Column(Integer, ForeignKey("users.id"), primary_key = True)
     age = Column(Integer, nullable=True)
     phone_number = Column(String(255), unique=False, nullable=True)
-    gender = Column(String(40), nullable=True)
+    gender = Column(Integer, nullable=True)
     education = Column(String(40), nullable=True)
     healthcare = Column(Integer, nullable=True)
     income = Column(Integer, nullable=True)
