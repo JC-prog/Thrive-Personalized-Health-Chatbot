@@ -1,3 +1,5 @@
+import { UserProfileData } from "src/types/user";
+
 const API_URL = "http://localhost:8000";
 
 // Get profile info
@@ -26,4 +28,20 @@ export const getProfile = async () => {
 
 export const getToken = (): string | null => {
 return localStorage.getItem("token");
+};
+
+// Update Profile
+export const updateProfile = async (data: UserProfileData) => {
+  const token = getToken();
+  if (!token) throw new Error("No token found");
+
+  const options: RequestInit = {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  };
+
+  return await fetchUserData(`${API_URL}/updateUser`, options);
 };

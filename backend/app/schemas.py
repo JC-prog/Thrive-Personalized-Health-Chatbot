@@ -1,5 +1,5 @@
-from pydantic import BaseModel, EmailStr
-from typing import Optional
+from pydantic import BaseModel, EmailStr,  conint, confloat, constr
+from typing import Optional, Dict
 
 # Authentication
 class UserCreate(BaseModel):
@@ -64,4 +64,37 @@ class UserProfileOut(BaseModel):
     class Config:
         orm_mode = True
 
+class UserProfileUpdateData(BaseModel):
+    # general_data fields
+    general_data: Dict[str, Optional[int | str]]
 
+    '''
+    phone_number: Optional[str]
+    gender: Optional[constr(min_length=1)]
+    education: Optional[conint(ge=0)]
+    healthcare: Optional[conint(ge=0)]
+    income: Optional[conint(ge=0)]
+
+    # clinical_measurement fields
+    height: Optional[confloat(ge=0)]
+    weight: Optional[confloat(ge=0)]
+    bmi: Optional[confloat(ge=0)]
+    systolic_bp: Optional[conint(ge=0)]
+    diastolic_bp: Optional[conint(ge=0)]
+    glucose_level: Optional[conint(ge=0)]
+    cholesterol_total: Optional[conint(ge=0)]
+
+    # lifestyle fields
+    smoking: Optional[conint(ge=0, le=1)]
+    alcohol: Optional[conint(ge=0, le=1)]
+    exercise: Optional[conint(ge=0, le=5)]
+    vegetable: Optional[conint(ge=0, le=5)]
+    fruits: Optional[conint(ge=0, le=5)]
+
+    # medical_history fields
+    heart_history: Optional[conint(ge=0, le=1)]
+    stroke: Optional[conint(ge=0, le=1)]
+    disability: Optional[conint(ge=0, le=1)]
+    '''
+    class Config:
+        orm_mode = True

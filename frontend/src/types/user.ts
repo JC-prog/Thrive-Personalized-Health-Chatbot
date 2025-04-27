@@ -8,6 +8,8 @@ export interface UserProfileData
       age: number;
       phone_number: string;
       gender: string;
+      education: number;
+      healthcare: number;
       income: number;
     };
     clinical_measurement: {
@@ -25,5 +27,10 @@ export interface UserProfileData
       exercise: number;
       vegetable: number;
       fruits: number;
+    }
+    medical_history: {
+      heart_history: number;
+      stroke: number;
+      disability: number;
     }
 }

@@ -89,6 +89,27 @@ def read_users_me(token: str = Depends(oauth2_scheme), db: Session = Depends(get
         raise HTTPException(status_code=404, detail="User not found")
     return user
 
+@app.post("/updateUser")
+def update_user(
+    user_data: schemas.UserProfileUpdateData,
+    token: str = Depends(oauth2_scheme), 
+    db: Session = Depends(get_db), 
+):
+    payload = auth.decode_token(token)
+    if payload is None:
+        raise HTTPException(status_code=401, detail="Invalid token")
+    
+    username = payload.get("sub")
+    if not username:
+        raise HTTPException(status_code=401, detail="Token does not contain a valid username")
+
+    user = crud.update_user(db, username, user_data.dict())  
+    
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    return {"user": user}  
+
 @app.post("/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
     reply = generate_response(request.message)

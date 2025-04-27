@@ -8,12 +8,12 @@ type Props = {
   update: (newData: Partial<UserProfileData>) => void;
 };
 
-const LifestyleStep = ({ next, prev, data, update }: Props) => {
-  const [lifestyle, setLifestyle] = useState(data.lifestyle);
+const MedicalHistoryStep = ({ next, prev, data, update }: Props) => {
+  const [medicalHistory, setMedicalHistory] = useState(data.medical_history);
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setLifestyle(prev => ({
+    setMedicalHistory(prev => ({
       ...prev,
       [name]: Number(value) 
     }));
@@ -21,7 +21,7 @@ const LifestyleStep = ({ next, prev, data, update }: Props) => {
 
   const handleNext = () => {
     update({
-      lifestyle
+      medical_history: medicalHistory
     });
     next();
   };
@@ -29,17 +29,17 @@ const LifestyleStep = ({ next, prev, data, update }: Props) => {
   return (
     <div className="text-center max-w-3xl mx-auto px-4 py-6">
       <h2 className="text-2xl md:text-4xl font-bold text-gray-800 mb-6 bg-gradient-to-r from-indigo-600 to-blue-500 bg-clip-text text-transparent">
-        Lifestyle Information
+        Medical History
       </h2>
       <p className="text-gray-600 mb-6">Please select your lifestyle habits.</p>
 
       <div className="space-y-6">
-        {/* Smoking */}
+        {/* Past Heart History */}
         <div>
-          <label className="block text-gray-700 font-semibold mb-2">Do you smoke?</label>
+          <label className="block text-gray-700 font-semibold mb-2">Have you been diagnosed with heart disease before?</label>
           <select
-            name="smokes"
-            value={lifestyle.smoking}
+            name="heart_history"
+            value={medicalHistory.heart_history}
             onChange={handleChange}
             className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
           >
@@ -51,10 +51,10 @@ const LifestyleStep = ({ next, prev, data, update }: Props) => {
 
         {/* Alcohol */}
         <div>
-          <label className="block text-gray-700 font-semibold mb-2">Do you drink alcohol?</label>
+          <label className="block text-gray-700 font-semibold mb-2">Have you ever had a stroke?</label>
           <select
-            name="alcohol"
-            value={lifestyle.alcohol}
+            name="stroke"
+            value={medicalHistory.stroke}
             onChange={handleChange}
             className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
           >
@@ -66,40 +66,10 @@ const LifestyleStep = ({ next, prev, data, update }: Props) => {
 
         {/* Exercise */}
         <div>
-          <label className="block text-gray-700 font-semibold mb-2">Do you exercise regularly?</label>
+          <label className="block text-gray-700 font-semibold mb-2">Do you have any form of disablity?</label>
           <select
-            name="exercise"
-            value={lifestyle.exercise}
-            onChange={handleChange}
-            className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
-          >
-            <option value="">Select</option>
-            <option value="1">Yes</option>
-            <option value="0">No</option>
-          </select>
-        </div>
-
-        {/* Vegetables */}
-        <div>
-          <label className="block text-gray-700 font-semibold mb-2">Do you eat vegetables regularly?</label>
-          <select
-            name="vegetable"
-            value={lifestyle.vegetable}
-            onChange={handleChange}
-            className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
-          >
-            <option value="">Select</option>
-            <option value="1">Yes</option>
-            <option value="0">No</option>
-          </select>
-        </div>
-
-        {/* Fruits */}
-        <div>
-          <label className="block text-gray-700 font-semibold mb-2">Do you eat fruits regularly?</label>
-          <select
-            name="fruits"
-            value={lifestyle.fruits}
+            name="disablity"
+            value={medicalHistory.disability}
             onChange={handleChange}
             className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
           >
@@ -130,4 +100,4 @@ const LifestyleStep = ({ next, prev, data, update }: Props) => {
   );
 };
 
-export default LifestyleStep;
+export default MedicalHistoryStep;

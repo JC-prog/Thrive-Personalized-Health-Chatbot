@@ -1,11 +1,11 @@
 import React from 'react';
-import { FormData } from '@pages/assessment-page';
+import { UserProfileData } from "src/types/user";
 
 type Props = {
   next: () => void;
   prev: () => void;
-  data: FormData;
-  update: (newData: Partial<FormData>) => void;
+  data: UserProfileData;
+  update: (newData: Partial<UserProfileData>) => void;
 };
 
 const PersonalInfoStep = ({ next, prev, data, update }: Props) => (
@@ -20,8 +20,8 @@ const PersonalInfoStep = ({ next, prev, data, update }: Props) => (
         <label className="block mb-2 text-gray-700 font-medium">Age</label>
         <input
           type="number"
-          value={data.age}
-          onChange={(e) => update({ age: parseInt(e.target.value) })}
+          value={data.general_data.age}
+          onChange={(e) => update({ general_data: { ...data.general_data, age: parseInt(e.target.value) }})}
           className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none shadow-sm"
           placeholder="Enter your age"
           min={0}
@@ -32,8 +32,8 @@ const PersonalInfoStep = ({ next, prev, data, update }: Props) => (
       <div>
         <label className="block mb-2 text-gray-700 font-medium">Gender</label>
         <select
-          value={data.gender}
-          onChange={(e) => update({ gender: e.target.value })}
+          value={data.general_data.gender}
+          onChange={(e) => update({ general_data: { ...data.general_data, gender: e.target.value }})}
           className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none shadow-sm"
         >
           <option value="">Select gender</option>
@@ -46,17 +46,17 @@ const PersonalInfoStep = ({ next, prev, data, update }: Props) => (
       <div>
         <label className="block mb-2 text-gray-700 font-medium">Education</label>
         <select
-          value={data.gender}
-          onChange={(e) => update({ gender: e.target.value })}
+          value={data.general_data.education}
+          onChange={(e) => update({ general_data: { ...data.general_data, education: parseInt(e.target.value) }})}
           className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none shadow-sm"
         >
-          <option value="">Select Education</option>
-          <option value="male">Never attended school</option>
-          <option value="female">Primary School</option>
-          <option value="non-binary">Secondary School</option>
-          <option value="female">Junior College</option>
-          <option value="non-binary">Polytechnic</option>
-          <option value="prefer-not-to-say">Graduated from University</option>
+          <option value="0">Select Education</option>
+          <option value="1">Never attended school</option>
+          <option value="2">Primary School</option>
+          <option value="3">Secondary School</option>
+          <option value="4">Junior College</option>
+          <option value="5">Polytechnic</option>
+          <option value="6">Graduated from University</option>
         </select>
       </div>
 
@@ -65,13 +65,13 @@ const PersonalInfoStep = ({ next, prev, data, update }: Props) => (
       <div>
         <label className="block mb-2 text-gray-700 font-medium">Do you have insurance?</label>
         <select
-          value={data.gender}
-          onChange={(e) => update({ gender: e.target.value })}
+          value={data.general_data.healthcare}
+          onChange={(e) => update({ general_data: { ...data.general_data, education: parseInt(e.target.value) }})}
           className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none shadow-sm"
         >
           <option value="">Select gender</option>
-          <option value="male">Yes</option>
-          <option value="female">No</option>
+          <option value="1">Yes</option>
+          <option value="0">No</option>
         </select>
       </div>
 
@@ -94,7 +94,7 @@ const PersonalInfoStep = ({ next, prev, data, update }: Props) => (
               name="income"
               value={idx + 1}
               checked={data.general_data?.income === idx + 1}
-              onChange={(e) => update({ income: parseInt(e.target.value) })}
+              onChange={(e) => update({ general_data: { ...data.general_data, income: parseInt(e.target.value) }})}
               className="form-radio h-4 w-4 text-indigo-600"
             />
             <span className="text-gray-700">{label}</span>
