@@ -36,7 +36,6 @@ const PersonalInfoStep = ({ next, prev, data, update }: Props) => (
           onChange={(e) => update({ gender: parseInt(e.target.value) })}
           className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none shadow-sm"
         >
-          <option value="">Select gender</option>
           <option value="1">Male</option>
           <option value="0">Female</option>
         </select>

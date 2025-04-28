@@ -216,3 +216,22 @@ def get_user_profile_by_username(db: Session, username: str) -> UserProfileOutpu
 
     return output
 
+# Get Historical Diabetes Risk Score
+# Used by get_user_risk_score
+def get_user_diabetes_risk(db: Session, user_id: int):
+
+    result = db.query(UserDiabetesPredictionHistory).order_by(UserDiabetesPredictionHistory.id.desc()).first()
+
+    if result:
+        return result.diabetes_risk
+    return None
+
+# Get Historical heart Risk Score
+# Used by get_user_risk_score
+def get_user_heart_risk(db: Session, user_id: int):
+
+    result = db.query(UserHeartPredictionHistory).order_by(UserHeartPredictionHistory.id.desc()).first()
+
+    if result:
+        return result.heart_risk
+    return None

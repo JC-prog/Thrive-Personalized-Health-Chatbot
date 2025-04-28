@@ -6,6 +6,7 @@ import HealthMetricStep from "@components/assessments/HealthMetricsStep";
 import CompleteStep from "@components/assessments/CompleteStep";
 import { UserProfileUpdateData } from "src/types/user";
 import MedicalHistoryStep from "@components/assessments/MedicalHistoryStep";
+import HealthScoreStep from "@components/assessments/HealthScoreStep";
 
 const AssessmentPage = () => {
   const [step, setStep] = useState(0);
@@ -46,6 +47,7 @@ const AssessmentPage = () => {
     <LifestyleStep next={next} prev={prev} data={formData} update={updateForm} />,
     <MedicalHistoryStep next={next} prev={prev} data={formData} update={updateForm} />,
     <HealthMetricStep next={next} prev={prev} data={formData} update={updateForm} />,
+    <HealthScoreStep next={next} prev={prev} data={formData} update={updateForm} />,
     <CompleteStep next={next} prev={prev} data={formData} update={updateForm} />
   ];
 

@@ -21,7 +21,7 @@ def generate_response(user_id: int, user_input: str, db, diabetes_model, heart_m
         predictor = DiabetesRiskPredictor(db, diabetes_model)
         risk_score = predictor.predict(user_id)
 
-        return "Your Diabetes Risk Score is: {:.2f}".format(risk_score * 100)
+        return "Based on your profile. Your Diabetes Risk Score is:\n{:.2f}".format(risk_score * 100)
 
     elif intent == "predict_heart":
 
@@ -31,7 +31,7 @@ def generate_response(user_id: int, user_input: str, db, diabetes_model, heart_m
         predictor = HeartRiskPredictor(db, heart_model)
         risk_score = predictor.predict(user_id)
 
-        return "Your Heart Disease Risk Score is: {:.2f}".format(risk_score * 100)
+        return "Based on your profile. Your Heart Disease Risk Score is: {:.2f}".format(risk_score * 100)
     
     elif intent == "exercise":
         return "Exercise Intent"

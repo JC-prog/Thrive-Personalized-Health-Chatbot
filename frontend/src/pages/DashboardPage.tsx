@@ -3,7 +3,7 @@ import { HeartPulse, Brain, Dumbbell } from "lucide-react";
 import Sidebar from "@components/navigation/Sidebar";
 import { useEffect, useState } from "react";
 import { UserProfileData } from "src/types/user";
-import { getProfile } from "../api/profile-api";
+import { getProfile, getRiskScores } from "../api/profile-api";
 
 const Card = ({
   title,
@@ -41,24 +41,14 @@ interface UserProfile {
 }
 
 interface UserRiskScore {
-  heartRiskScore: number;
-  diabetesRiskScore: number;
-}
-
-const mockUserProfile: UserProfile = {
-  generalHealth: 4.2,
-  mentalHealth: 2.8,
-  physicalHealth: 3.0,
-};
-
-const mockRiskScore: UserRiskScore = {
-  heartRiskScore: 50,
-  diabetesRiskScore: 50
+  diabetes_risk: number;
+  heart_risk: number;
 }
 
 const DashboardContent = () => {
   //const user_profile = mockUserProfile; // Replace this with real user profile
   const [userProfile, setUserProfile] = useState<UserProfileData | null>(null); 
+  const [riskScores, setRiskScores] = useState<UserRiskScore | null>(null);
   const [error, setError] = useState<string | null>(null);
   
     useEffect(() => {
@@ -70,9 +60,28 @@ const DashboardContent = () => {
           setError(err.message || "Failed to load profile");
         }
       };
+
+      const fetchRiskData = async () => {
+        try {
+          const data = await getRiskScores();
+          setRiskScores(data);
+        } catch (err: any) {
+          setError(err.message || "Failed to load risk scores");
+        }
+      };
   
       fetchProfile();
+      fetchRiskData();
+
     }, []);
+  
+  const mapHealthScore = (x: number): number => {
+    // Calculate the mapped score
+    const mappedScore = 5 - (4 * (x - 1)) / 29;
+  
+    // Ensure the score is within the 1-5 range
+    return Math.min(5, Math.max(1, mappedScore));
+  };
 
   return (
     <div className="flex-1 bg-slate-50 p-8 min-h-screen">
@@ -82,23 +91,28 @@ const DashboardContent = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         {userProfile && (
           <>
+            {/* General Health Score Card */}
             <Card
               title="General Health Score"
               value={userProfile.generalHealth}
               icon={<HeartPulse size={28} />}
               bg={getScoreColor(userProfile.generalHealth)}
             />
+
+            {/* Mental Health Score Card */}
             <Card
               title="Mental Health Score"
-              value={userProfile.mentalHealth / 6}
+              value={mapHealthScore(userProfile.mentalHealth)} 
               icon={<Brain size={28} />}
-              bg={getScoreColor(userProfile.mentalHealth / 6)}
+              bg={getScoreColor(mapHealthScore(userProfile.mentalHealth))}
             />
+
+            {/* Physical Health Score Card */}
             <Card
               title="Physical Health Score"
-              value={userProfile.physicalHealth / 6}
+              value={mapHealthScore(userProfile.physicalHealth / 6)} 
               icon={<Dumbbell size={28} />}
-              bg={getScoreColor(userProfile.physicalHealth / 6)}
+              bg={getScoreColor(mapHealthScore(userProfile.physicalHealth))}
             />
           </>
         )}
@@ -114,7 +128,7 @@ const DashboardContent = () => {
           <div className="rounded-2xl p-6 bg-red-100 flex flex-col items-center justify-center shadow-md">
             <h3 className="text-lg font-semibold text-slate-800 mb-2">Heart Disease Risk</h3>
             <p className="text-3xl font-bold text-red-600">
-              {mockRiskScore.heartRiskScore.toFixed(2)}%
+              {riskScores?.heart_risk.toFixed(2) ?? "-"}%
             </p>
           </div>
 
@@ -122,7 +136,7 @@ const DashboardContent = () => {
           <div className="rounded-2xl p-6 bg-blue-100 flex flex-col items-center justify-center shadow-md">
             <h3 className="text-lg font-semibold text-slate-800 mb-2">Diabetes Risk</h3>
             <p className="text-3xl font-bold text-blue-600">
-              {mockRiskScore.diabetesRiskScore.toFixed(2)}%
+              {riskScores?.diabetes_risk.toFixed(2) ?? "-"}%
             </p>
           </div>
         </div>

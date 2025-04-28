@@ -127,4 +127,12 @@ class UserProfileClinicalMeasurementOut(BaseModel):
     class Config:
         orm_mode = True
 
+# Historical Risk Score Output
+class UserRiskScore(BaseModel):
+    id: int
+    diabetes_risk: Optional[float]
+    heart_risk: Optional[float]
+
+    class Config:
+        orm_mode = True
 

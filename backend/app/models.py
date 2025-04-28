@@ -81,13 +81,13 @@ class UserHealthScore(Base):
 class UserDiabetesPredictionHistory(Base):
     __tablename__ = "user_diabetes_history"
 
-    id = Column(Integer, primary_key = True)
+    id = Column(Integer, primary_key = True, autoincrement=True)
     user_id = Column(Integer, nullable=False)
     diabetes_risk = Column(Float, nullable=False)
 
 class UserHeartPredictionHistory(Base):
     __tablename__ = "user_heart_history"
 
-    id = Column(Integer, primary_key = True)
+    id = Column(Integer, primary_key = True, autoincrement=True)
     user_id = Column(Integer, nullable=False)
     heart_risk = Column(Float, nullable=False)

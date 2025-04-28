@@ -66,7 +66,7 @@ const CompleteStep = ({ next, prev, data, update }: Props) => {
         <ul className="space-y-2">
           <li><strong>Height:</strong> {data.height} cm</li>
           <li><strong>Weight:</strong> {data.weight} kg</li>
-          <li><strong>BMI:</strong> {data.weight / ((data.weight / 100) ** 2)}</li>
+          <li><strong>BMI:</strong> {(data.weight / ((data.height / 100) ** 2)).toFixed(2)}</li>
           <li><strong>Systolic BP:</strong> {data.systolic_bp} mmHg</li>
           <li><strong>Diastolic BP:</strong> {data.diastolic_bp} mmHg</li>
           <li><strong>Glucose Level:</strong> {data.glucose_level} mg/dL</li>
@@ -81,6 +81,16 @@ const CompleteStep = ({ next, prev, data, update }: Props) => {
           <li><strong>Heart History:</strong> {data.heart_history}</li>
           <li><strong>Stroke History:</strong> {data.stroke}</li>
           <li><strong>Disability History:</strong> {data.disability}</li>
+        </ul>
+      </div>
+
+      {/* Health Score */}
+      <div className="bg-indigo-50 p-6 rounded-xl shadow-sm mb-10 border border-indigo-100 text-left">
+        <h3 className="font-semibold text-indigo-800 mb-4 text-xl">Medical History:</h3>
+        <ul className="space-y-2">
+          <li><strong>General Health:</strong> {data.generalHealth}</li>
+          <li><strong>Stroke History:</strong> {data.mentalHealth}</li>
+          <li><strong>Disability History:</strong> {data.physicalHealth}</li>
         </ul>
       </div>
 

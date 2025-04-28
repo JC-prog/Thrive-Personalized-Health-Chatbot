@@ -1,7 +1,7 @@
 import pandas as pd
 
 from sqlalchemy.orm import Session
-from app.models import UserGeneralData, UserClinicalMeasurement, UserLifeStyleInformation
+from app.models import UserGeneralData, UserClinicalMeasurement, UserLifeStyleInformation, UserHeartPredictionHistory
 
 class HeartRiskPredictor:
     def __init__(self, db: Session, model):
@@ -44,7 +44,18 @@ class HeartRiskPredictor:
         general, clinical, lifestyle = self.get_user_data(user_id)
         df = self.preprocess(general, clinical, lifestyle)
 
-        return self.model.predict_proba(df)[0][1]
+        predicted_risk = self.model.predict_proba(df)[0][1]
+
+        db_history = UserHeartPredictionHistory(
+            user_id = user_id,
+            heart_risk = predicted_risk
+        )
+
+        self.db.add(db_history)
+        self.db.commit()
+        self.db.refresh(db_history)
+
+        return predicted_risk
 
     @staticmethod
     def bmi_category(bmi):

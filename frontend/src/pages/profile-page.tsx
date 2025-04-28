@@ -97,8 +97,8 @@ const ProfileContent = () => {
                     <div><h4 className="text-sm text-slate-600">Weight (Kg)</h4><p className="text-base font-medium text-slate-800">{userProfile?.weight.toFixed(2) ?? "-"}</p></div>
                     <div><h4 className="text-sm text-slate-600">Blood Pressure</h4><p className="text-base font-medium text-slate-800">{userProfile?.systolic_bp ?? "-"}/{userProfile?.diastolic_bp ?? "-"}</p></div>
                     <div><h4 className="text-sm text-slate-600">BMI</h4><p className="text-base font-medium text-slate-800">{userProfile?.bmi.toFixed(2) ?? "-"}</p></div>
-                    <div><h4 className="text-sm text-slate-600">Glucose (mmol/L)</h4><p className="text-base font-medium text-slate-800">{userProfile?.glucose_level ?? "-"}</p></div>
-                    <div><h4 className="text-sm text-slate-600">Cholesterol (mmol/L)</h4><p className="text-base font-medium text-slate-800">{userProfile?.cholesterol_total ?? "-"}</p></div>
+                    <div><h4 className="text-sm text-slate-600">Glucose (mg/dL)</h4><p className="text-base font-medium text-slate-800">{userProfile?.glucose_level ?? "-"}</p></div>
+                    <div><h4 className="text-sm text-slate-600">Cholesterol (mg/dL)</h4><p className="text-base font-medium text-slate-800">{userProfile?.cholesterol_total ?? "-"}</p></div>
                 </div>
             </div>
 

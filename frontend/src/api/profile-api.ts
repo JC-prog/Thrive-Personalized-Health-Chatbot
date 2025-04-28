@@ -27,7 +27,7 @@ export const getProfile = async () => {
   };
 
 export const getToken = (): string | null => {
-return localStorage.getItem("token");
+  return localStorage.getItem("token");
 };
 
 // Update Profile
@@ -70,4 +70,19 @@ export const updateProfile = async (data: UserProfileUpdateData) => {
   };
 
   return await fetchUserData(`${API_URL}/updateUser`, options);
+};
+
+// Get risk scores (Heart and Diabetes)
+export const getRiskScores = async () => {
+  const token = getToken();
+  if (!token) throw new Error("No token found");
+
+  const options: RequestInit = {
+    method: "GET",
+    headers: {
+      "Authorization": `Bearer ${token}`,
+    },
+  };
+
+  return await fetchUserData(`${API_URL}/risk-score`, options);
 };
