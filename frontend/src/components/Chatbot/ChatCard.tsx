@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { sendMessage } from "../../api/chat-api"
 
 const ChatCard = () => {
   const [messages, setMessages] = useState<{ text: string; type: 'user' | 'bot' }[]>([]);
@@ -10,20 +11,13 @@ const ChatCard = () => {
       const userMessage = { text: input, type: "user" as const };
       setMessages((prevMessages) => [...prevMessages, userMessage]);
       setInput("");
-  
+
       try {
-        const res = await fetch("http://localhost:8000/chat", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ message: input }),
-        });
-  
-        const data = await res.json();
+        const data = await sendMessage(input); // <-- use the new API function
         const botMessage = { text: data.response, type: "bot" as const };
         setMessages((prevMessages) => [...prevMessages, botMessage]);
       } catch (error) {
+        console.error(error);
         const errorMsg = {
           text: "Sorry, something went wrong. Please try again later.",
           type: "bot" as const,
@@ -32,9 +26,7 @@ const ChatCard = () => {
       }
     }
   };
-  
 
-  // Auto scroll to bottom when new message is added
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);

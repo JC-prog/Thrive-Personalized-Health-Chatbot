@@ -1,27 +1,58 @@
 import React, { useState } from 'react';
-import { UserProfileData } from "src/types/user";
+import { UserProfileUpdateData } from "src/types/user";
 
 type Props = {
   next: () => void;
   prev: () => void;
-  data: UserProfileData;
-  update: (newData: Partial<UserProfileData>) => void;
+  data: UserProfileUpdateData;
+  update: (newData: Partial<UserProfileUpdateData>) => void;
 };
 
 const HealthMetricStep = ({ next, prev, data, update }: Props) => {
-  const [clinicalMeasurement, setClinicalMeasurement] = useState(data.clinical_measurement);
+  // Individual state for clinical measurements
+  const [height, setHeight] = useState(data.height);
+  const [weight, setWeight] = useState(data.weight);
+  const [systolicBp, setSystolicBp] = useState(data.systolic_bp);
+  const [diastolicBp, setDiastolicBp] = useState(data.diastolic_bp);
+  const [glucoseLevel, setGlucoseLevel] = useState(data.glucose_level);
+  const [cholesterolTotal, setCholesterolTotal] = useState(data.cholesterol_total);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setClinicalMeasurement(prev => ({
-      ...prev,
-      [name]: Number(value) // assuming all are numbers
-    }));
+    const numericValue = Number(value);
+
+    switch (name) {
+      case 'height':
+        setHeight(numericValue);
+        break;
+      case 'weight':
+        setWeight(numericValue);
+        break;
+      case 'systolic_bp':
+        setSystolicBp(numericValue);
+        break;
+      case 'diastolic_bp':
+        setDiastolicBp(numericValue);
+        break;
+      case 'glucose_level':
+        setGlucoseLevel(numericValue);
+        break;
+      case 'cholesterol_total':
+        setCholesterolTotal(numericValue);
+        break;
+      default:
+        break;
+    }
   };
 
   const handleNext = () => {
     update({
-      clinical_measurement: clinicalMeasurement
+      height,
+      weight,
+      systolic_bp: systolicBp,
+      diastolic_bp: diastolicBp,
+      glucose_level: glucoseLevel,
+      cholesterol_total: cholesterolTotal,
     });
     next();
   };
@@ -40,7 +71,7 @@ const HealthMetricStep = ({ next, prev, data, update }: Props) => {
           <input
             type="number"
             name="height"
-            value={clinicalMeasurement.height}
+            value={height}
             onChange={handleChange}
             placeholder="e.g., 170"
             className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
@@ -53,7 +84,7 @@ const HealthMetricStep = ({ next, prev, data, update }: Props) => {
           <input
             type="number"
             name="weight"
-            value={clinicalMeasurement.weight}
+            value={weight}
             onChange={handleChange}
             placeholder="e.g., 65"
             className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
@@ -66,7 +97,7 @@ const HealthMetricStep = ({ next, prev, data, update }: Props) => {
           <input
             type="number"
             name="systolic_bp"
-            value={clinicalMeasurement.systolic_bp}
+            value={systolicBp}
             onChange={handleChange}
             placeholder="e.g., 120"
             className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
@@ -79,7 +110,7 @@ const HealthMetricStep = ({ next, prev, data, update }: Props) => {
           <input
             type="number"
             name="diastolic_bp"
-            value={clinicalMeasurement.diastolic_bp}
+            value={diastolicBp}
             onChange={handleChange}
             placeholder="e.g., 80"
             className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
@@ -92,7 +123,7 @@ const HealthMetricStep = ({ next, prev, data, update }: Props) => {
           <input
             type="number"
             name="glucose_level"
-            value={clinicalMeasurement.glucose_level}
+            value={glucoseLevel}
             onChange={handleChange}
             placeholder="e.g., 90"
             className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
@@ -105,7 +136,7 @@ const HealthMetricStep = ({ next, prev, data, update }: Props) => {
           <input
             type="number"
             name="cholesterol_total"
-            value={clinicalMeasurement.cholesterol_total}
+            value={cholesterolTotal}
             onChange={handleChange}
             placeholder="e.g., 180"
             className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"

@@ -104,7 +104,7 @@ def update_user(db: Session, user: User, user_data):
     if clinical:
         clinical.height = user_data.height
         clinical.weight = user_data.weight
-        clinical.bmi = user_data.weight / (user_data.height ** 2)
+        clinical.bmi = user_data.weight / ((user_data.height / 100) ** 2)
         clinical.systolic_bp = user_data.systolic_bp
         clinical.diastolic_bp = user_data.diastolic_bp
         clinical.glucose_level = user_data.glucose_level
@@ -114,7 +114,7 @@ def update_user(db: Session, user: User, user_data):
             id=user_id,
             height=user_data.height,
             weight=user_data.weight,
-            bmi = user_data.weight / (user_data.height ** 2),
+            bmi = user_data.weight / ((user_data.height / 100) ** 2),
             systolic_bp=user_data.systolic_bp,
             diastolic_bp=user_data.diastolic_bp,
             glucose_level=user_data.glucose_level,
@@ -138,6 +138,22 @@ def update_user(db: Session, user: User, user_data):
         )
         db.add(db_medical_history)
 
+    # Score Table
+    score = db.query(UserHealthScore).filter_by(id=user_id).first()
+
+    if score:
+        score.generalHealth = user_data.generalHealth
+        score.mentalHealth = user_data.mentalHealth
+        score.physicalHealth = user_data.physicalHealth
+    else:
+        db_score = UserMedicalHistory(
+            id=user_id,
+            generalHealth=user_data.generalHealth,
+            mentalHealth=user_data.mentalHealth,
+            physicalHealth=user_data.physicalHealth
+        )
+        db.add(db_score)
+
     # Commit and refresh all objects
     db.commit()
 
@@ -147,13 +163,15 @@ def update_user(db: Session, user: User, user_data):
     db.refresh(lifestyle if lifestyle else db_lifestyle)
     db.refresh(clinical if clinical else db_clinical)
     db.refresh(medical_history if medical_history else db_medical_history)
+    db.refresh(score if score else db_score)
 
     return {"status": "success", "message": "User updated successfully"}
 
 # User Profile Retrieval
 def get_user_profile_by_username(db: Session, username: str) -> UserProfileOutput:
-    user = db.query(models.User).filter(models.User.username == username).first()
     
+    user = db.query(models.User).filter(models.User.username == username).first()
+
     if user is None:
         return None 
 
@@ -163,6 +181,7 @@ def get_user_profile_by_username(db: Session, username: str) -> UserProfileOutpu
     lifestyle = db.query(UserLifeStyleInformation).filter_by(id=user_id).first()
     clinical = db.query(UserClinicalMeasurement).filter_by(id=user_id).first()
     medical_history = db.query(UserMedicalHistory).filter_by(id=user_id).first()
+    score = db.query(UserHealthScore).filter_by(id=user_id).first()
 
     output = UserProfileOutput(
         id = user.id,
@@ -180,14 +199,19 @@ def get_user_profile_by_username(db: Session, username: str) -> UserProfileOutpu
         fruits = lifestyle.fruits,
         height = clinical.height,
         weight = clinical.weight,
-        bmi = clinical.weight / (clinical.height ** 2),
+        bmi = clinical.bmi,
         systolic_bp = clinical.systolic_bp,
         diastolic_bp = clinical.diastolic_bp,
         glucose_level = clinical.glucose_level,
         cholesterol_total = clinical.cholesterol_total,
         heart_history = medical_history.heart_history,
         stroke = medical_history.stroke,
-        disability = medical_history.disability
+        disability = medical_history.disability,
+        generalHealth = score.generalHealth,
+        mentalHealth = score.mentalHealth,
+        physicalHealth = score.physicalHealth,
+        assessment_done = user.assessment_done,
+        assessment_done_at = user.assessment_done_at
     )
 
     return output

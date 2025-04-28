@@ -1,4 +1,4 @@
-import { UserProfileData } from "src/types/user";
+import { UserProfileUpdateData } from "src/types/user";
 
 const API_URL = "http://localhost:8000";
 
@@ -31,16 +31,42 @@ return localStorage.getItem("token");
 };
 
 // Update Profile
-export const updateProfile = async (data: UserProfileData) => {
+export const updateProfile = async (data: UserProfileUpdateData) => {
   const token = getToken();
   if (!token) throw new Error("No token found");
+
+  const formattedData = {
+    age: data.age,
+    gender: data.gender,
+    education: data.education,
+    healthcare: data.healthcare,
+    income: data.income,
+    smoking: data.smoking,
+    alcohol: data.alcohol,
+    active_lifestyle: data.active_lifestyle,
+    vegetables: data.vegetables,
+    fruits: data.fruits,
+    height: data.height,
+    weight: data.weight,
+    systolic_bp: data.systolic_bp,
+    diastolic_bp: data.diastolic_bp,
+    glucose_level: data.glucose_level,
+    cholesterol_total: data.cholesterol_total,
+    heart_history: data.heart_history,
+    stroke: data.stroke,
+    disability: data.disability,
+    generalHealth: data.generalHealth,
+    mentalHealth: data.mentalHealth,
+    physicalHealth: data.physicalHealth,
+  };
 
   const options: RequestInit = {
     method: "POST",
     headers: {
       "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify(formattedData),
   };
 
   return await fetchUserData(`${API_URL}/updateUser`, options);

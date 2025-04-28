@@ -1,27 +1,37 @@
 import React, { useState } from 'react';
-import { UserProfileData } from "src/types/user";
+import { UserProfileUpdateData } from 'src/types/user';
 
 type Props = {
   next: () => void;
   prev: () => void;
-  data: UserProfileData;
-  update: (newData: Partial<UserProfileData>) => void;
+  data: UserProfileUpdateData;
+  update: (newData: Partial<UserProfileUpdateData>) => void;
 };
 
 const LifestyleStep = ({ next, prev, data, update }: Props) => {
-  const [lifestyle, setLifestyle] = useState(data.lifestyle);
+  const [lifestyle, setLifestyle] = useState({
+    smoking: data.smoking,
+    alcohol: data.alcohol,
+    active_lifestyle: data.active_lifestyle,
+    vegetables: data.vegetables,
+    fruits: data.fruits,
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setLifestyle(prev => ({
+    setLifestyle((prev) => ({
       ...prev,
-      [name]: Number(value) 
+      [name]: Number(value),
     }));
   };
 
   const handleNext = () => {
     update({
-      lifestyle
+      smoking: lifestyle.smoking,
+      alcohol: lifestyle.alcohol,
+      active_lifestyle: lifestyle.active_lifestyle,
+      vegetables: lifestyle.vegetables,
+      fruits: lifestyle.fruits,
     });
     next();
   };
@@ -38,14 +48,13 @@ const LifestyleStep = ({ next, prev, data, update }: Props) => {
         <div>
           <label className="block text-gray-700 font-semibold mb-2">Do you smoke?</label>
           <select
-            name="smokes"
+            name="smoking"
             value={lifestyle.smoking}
             onChange={handleChange}
             className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
           >
-            <option value="">Select</option>
-            <option value="1">Yes</option>
             <option value="0">No</option>
+            <option value="1">Yes</option>
           </select>
         </div>
 
@@ -58,9 +67,8 @@ const LifestyleStep = ({ next, prev, data, update }: Props) => {
             onChange={handleChange}
             className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
           >
-            <option value="">Select</option>
-            <option value="1">Yes</option>
             <option value="0">No</option>
+            <option value="1">Yes</option>
           </select>
         </div>
 
@@ -68,14 +76,13 @@ const LifestyleStep = ({ next, prev, data, update }: Props) => {
         <div>
           <label className="block text-gray-700 font-semibold mb-2">Do you exercise regularly?</label>
           <select
-            name="exercise"
-            value={lifestyle.exercise}
+            name="active_lifestyle"
+            value={lifestyle.active_lifestyle}
             onChange={handleChange}
             className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
           >
-            <option value="">Select</option>
-            <option value="1">Yes</option>
             <option value="0">No</option>
+            <option value="1">Yes</option>
           </select>
         </div>
 
@@ -83,14 +90,13 @@ const LifestyleStep = ({ next, prev, data, update }: Props) => {
         <div>
           <label className="block text-gray-700 font-semibold mb-2">Do you eat vegetables regularly?</label>
           <select
-            name="vegetable"
-            value={lifestyle.vegetable}
+            name="vegetables"
+            value={lifestyle.vegetables}
             onChange={handleChange}
             className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
           >
-            <option value="">Select</option>
-            <option value="1">Yes</option>
             <option value="0">No</option>
+            <option value="1">Yes</option>
           </select>
         </div>
 
@@ -103,9 +109,8 @@ const LifestyleStep = ({ next, prev, data, update }: Props) => {
             onChange={handleChange}
             className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
           >
-            <option value="">Select</option>
-            <option value="1">Yes</option>
             <option value="0">No</option>
+            <option value="1">Yes</option>
           </select>
         </div>
       </div>

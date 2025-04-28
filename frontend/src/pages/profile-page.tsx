@@ -41,19 +41,21 @@ const ProfileContent = () => {
                     </div>
                     <div>
                       <h4 className="text-sm text-slate-600">Email</h4>
-                      <p className="text-base font-medium text-slate-800">{userProfile?.email}</p>
+                      <p className="text-base font-medium text-slate-800">{userProfile?.email ?? "-"}</p>
                     </div>
                     <div>
                       <h4 className="text-sm text-slate-600">Phone</h4>
-                      <p className="text-base font-medium text-slate-800">{userProfile?.general_data?.phone_number ?? "-"}</p>
+                      <p className="text-base font-medium text-slate-800">{userProfile?.phone_number ?? "-"}</p>
                     </div>
                     <div>
                       <h4 className="text-sm text-slate-600">Age</h4>
-                      <p className="text-base font-medium text-slate-800">{userProfile?.general_data?.age ?? "-"}</p>
+                      <p className="text-base font-medium text-slate-800">{userProfile?.age ?? "-"}</p>
                     </div>
                     <div>
                       <h4 className="text-sm text-slate-600">Gender</h4>
-                      <p className="text-base font-medium text-slate-800">{userProfile?.general_data?.gender ?? "-"}</p>
+                      <p className="text-base font-medium text-slate-800">
+                        {userProfile?.gender === 1? "Male" : "Female"}
+                      </p>
                     </div>
                 </div>
                 </div>
@@ -62,30 +64,74 @@ const ProfileContent = () => {
             <div>
                 <h2 className="text-2xl font-semibold text-slate-800 mb-2">Lifestyle Information</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div><h4 className="text-sm text-slate-600">Physical Activity</h4><p className="text-base font-medium text-slate-800">3x a week</p></div>
-                    <div><h4 className="text-sm text-slate-600">Diet</h4><p className="text-base font-medium text-slate-800">Balanced</p></div>
-                    <div><h4 className="text-sm text-slate-600">Alcohol Intake</h4><p className="text-base font-medium text-slate-800">3x a week</p></div>
-                    <div><h4 className="text-sm text-slate-600">Smoking Status</h4><p className="text-base font-medium text-slate-800">Yes</p></div>
+                    <div><h4 className="text-sm text-slate-600">Physical Activity</h4>
+                    <p className="text-base font-medium text-slate-800">
+                      {userProfile?.active_lifestyle === 1 ? "Yes" : "No"}
+                      </p>
+                    </div>
+                    <div>
+                      <h4 className="text-sm text-slate-600">Diet: Vegetables</h4>
+                      <p className="text-base font-medium text-slate-800">{userProfile?.vegetables === 1 ? "Yes" : "No"}</p></div>
+                    <div>
+                      <h4 className="text-sm text-slate-600">Diet: Fruits</h4>
+                      <p className="text-base font-medium text-slate-800">{userProfile?.fruits === 1 ? "Yes" : "No"}</p></div>
+                    <div>
+                      <h4 className="text-sm text-slate-600">Alcohol Intake</h4>
+                      <p className="text-base font-medium text-slate-800">
+                        {userProfile?.alcohol === 1 ? "Yes" : "No"}
+                      </p>
+                    </div>
+                    <div>
+                      <h4 className="text-sm text-slate-600">Smoking Status</h4>
+                      <p className="text-base font-medium text-slate-800">
+                        {userProfile?.smoking === 1 ? "Yes" : "No"}
+                      </p>
+                    </div>
                 </div>
             </div>
 
             <div>
                 <h2 className="text-2xl font-semibold text-slate-800 mb-2">Clinical Measurement</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div><h4 className="text-sm text-slate-600">Height</h4><p className="text-base font-medium text-slate-800">{userProfile?.clinical_measurement?.height ?? "-"}</p></div>
-                    <div><h4 className="text-sm text-slate-600">Weight</h4><p className="text-base font-medium text-slate-800">{userProfile?.clinical_measurement?.weight ?? "-"}</p></div>
-                    <div><h4 className="text-sm text-slate-600">Blood Pressure</h4><p className="text-base font-medium text-slate-800">{userProfile?.clinical_measurement?.systolic_bp ?? "-"}/{userProfile?.clinical_measurement?.diastolic_bp ?? "-"}</p></div>
-                    <div><h4 className="text-sm text-slate-600">BMI</h4><p className="text-base font-medium text-slate-800">{userProfile?.clinical_measurement?.bmi ?? "-"}</p></div>
-                    <div><h4 className="text-sm text-slate-600">Glucose</h4><p className="text-base font-medium text-slate-800">{userProfile?.clinical_measurement?.glucose_level ?? "-"}</p></div>
-                    <div><h4 className="text-sm text-slate-600">Cholesterol</h4><p className="text-base font-medium text-slate-800">{userProfile?.clinical_measurement?.cholesterol_total ?? "-"}</p></div>
+                    <div><h4 className="text-sm text-slate-600">Height (cm)</h4><p className="text-base font-medium text-slate-800">{userProfile?.height.toFixed(1) ?? "-"}</p></div>
+                    <div><h4 className="text-sm text-slate-600">Weight (Kg)</h4><p className="text-base font-medium text-slate-800">{userProfile?.weight.toFixed(2) ?? "-"}</p></div>
+                    <div><h4 className="text-sm text-slate-600">Blood Pressure</h4><p className="text-base font-medium text-slate-800">{userProfile?.systolic_bp ?? "-"}/{userProfile?.diastolic_bp ?? "-"}</p></div>
+                    <div><h4 className="text-sm text-slate-600">BMI</h4><p className="text-base font-medium text-slate-800">{userProfile?.bmi.toFixed(2) ?? "-"}</p></div>
+                    <div><h4 className="text-sm text-slate-600">Glucose (mmol/L)</h4><p className="text-base font-medium text-slate-800">{userProfile?.glucose_level ?? "-"}</p></div>
+                    <div><h4 className="text-sm text-slate-600">Cholesterol (mmol/L)</h4><p className="text-base font-medium text-slate-800">{userProfile?.cholesterol_total ?? "-"}</p></div>
                 </div>
             </div>
 
             <div>
                 <h2 className="text-2xl font-semibold text-slate-800 mb-2">Medical History</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div><h4 className="text-sm text-slate-600">Condition</h4><p className="text-base font-medium text-slate-800">None</p></div>
-                <div><h4 className="text-sm text-slate-600">Allergies</h4><p className="text-base font-medium text-slate-800">Peanuts</p></div>
+                  <div>
+                    <h4 className="text-sm text-slate-600">Have you had heart attack before?</h4>
+                    <p className="text-base font-medium text-slate-800">
+                      {userProfile?.heart_history === 1 ? "Yes" : "No"}
+                    </p>
+                  </div>
+                  <div>
+                    <h4 className="text-sm text-slate-600">Have you had stroke bfore?</h4>
+                    <p className="text-base font-medium text-slate-800">
+                      {userProfile?.stroke === 1 ? "Yes" : "No"}
+                    </p>
+                  </div>
+                  <div>
+                    <h4 className="text-sm text-slate-600">Do you have difficult walking?</h4>
+                    <p className="text-base font-medium text-slate-800">
+                      {userProfile?.disability === 1 ? "Yes" : "No"}
+                    </p>
+                  </div>
+                </div>
+            </div>
+
+            <div>
+                <h2 className="text-2xl font-semibold text-slate-800 mb-2">Health Score</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div><h4 className="text-sm text-slate-600">General Health</h4><p className="text-base font-medium text-slate-800">{userProfile?.generalHealth}</p></div>
+                  <div><h4 className="text-sm text-slate-600">Mental Health</h4><p className="text-base font-medium text-slate-800">{userProfile?.mentalHealth}</p></div>
+                  <div><h4 className="text-sm text-slate-600">Physical Health</h4><p className="text-base font-medium text-slate-800">{userProfile?.physicalHealth}</p></div>
                 </div>
             </div>
         </div>

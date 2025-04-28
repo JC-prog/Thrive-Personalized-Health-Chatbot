@@ -1,11 +1,11 @@
 import React from 'react';
-import { UserProfileData } from "src/types/user";
+import { UserProfileUpdateData } from "src/types/user";
 
 type Props = {
   next: () => void;
   prev: () => void;
-  data: UserProfileData;
-  update: (newData: Partial<UserProfileData>) => void;
+  data: UserProfileUpdateData;
+  update: (newData: Partial<UserProfileUpdateData>) => void;
 };
 
 const PersonalInfoStep = ({ next, prev, data, update }: Props) => (
@@ -20,8 +20,8 @@ const PersonalInfoStep = ({ next, prev, data, update }: Props) => (
         <label className="block mb-2 text-gray-700 font-medium">Age</label>
         <input
           type="number"
-          value={data.general_data.age}
-          onChange={(e) => update({ general_data: { ...data.general_data, age: parseInt(e.target.value) }})}
+          value={data.age}
+          onChange={(e) => update({ age: parseInt(e.target.value) })}
           className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none shadow-sm"
           placeholder="Enter your age"
           min={0}
@@ -32,13 +32,13 @@ const PersonalInfoStep = ({ next, prev, data, update }: Props) => (
       <div>
         <label className="block mb-2 text-gray-700 font-medium">Gender</label>
         <select
-          value={data.general_data.gender}
-          onChange={(e) => update({ general_data: { ...data.general_data, gender: e.target.value }})}
+          value={data.gender}
+          onChange={(e) => update({ gender: parseInt(e.target.value) })}
           className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none shadow-sm"
         >
           <option value="">Select gender</option>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
+          <option value="1">Male</option>
+          <option value="0">Female</option>
         </select>
       </div>
 
@@ -46,8 +46,8 @@ const PersonalInfoStep = ({ next, prev, data, update }: Props) => (
       <div>
         <label className="block mb-2 text-gray-700 font-medium">Education</label>
         <select
-          value={data.general_data.education}
-          onChange={(e) => update({ general_data: { ...data.general_data, education: parseInt(e.target.value) }})}
+          value={data.education}
+          onChange={(e) => update({ education: parseInt(e.target.value) })}
           className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none shadow-sm"
         >
           <option value="0">Select Education</option>
@@ -60,18 +60,16 @@ const PersonalInfoStep = ({ next, prev, data, update }: Props) => (
         </select>
       </div>
 
-
-    {/* Insurance */}
+      {/* Insurance */}
       <div>
         <label className="block mb-2 text-gray-700 font-medium">Do you have insurance?</label>
         <select
-          value={data.general_data.healthcare}
-          onChange={(e) => update({ general_data: { ...data.general_data, education: parseInt(e.target.value) }})}
+          value={data.healthcare}
+          onChange={(e) => update({ healthcare: parseInt(e.target.value) })}
           className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none shadow-sm"
         >
-          <option value="">Select gender</option>
-          <option value="1">Yes</option>
           <option value="0">No</option>
+          <option value="1">Yes</option>
         </select>
       </div>
 
@@ -79,30 +77,29 @@ const PersonalInfoStep = ({ next, prev, data, update }: Props) => (
       <div>
         <label className="block mb-2 text-gray-700 font-medium">What’s your income level?</label>
         <div className="space-y-2">
-        {[
-          "Less than $10,000",
-          "Less than $15,000 ($10,000 to less than $15,000)",
-          "Less than $20,000 ($15,000 to less than $20,000)",
-          "Less than $25,000 ($20,000 to less than $25,000)",
-          "Less than $50,000 ($35,000 to less than $50,000)",
-          "Less than $75,000 ($50,000 to less than $75,000)",
-          "$75,000 or more",
-        ].map((label, idx) => (
-          <label key={idx} className="flex items-center space-x-3">
-            <input
-              type="radio"
-              name="income"
-              value={idx + 1}
-              checked={data.general_data?.income === idx + 1}
-              onChange={(e) => update({ general_data: { ...data.general_data, income: parseInt(e.target.value) }})}
-              className="form-radio h-4 w-4 text-indigo-600"
-            />
-            <span className="text-gray-700">{label}</span>
-          </label>
-        ))}
+          {[
+            "Less than $10,000",
+            "Less than $15,000 ($10,000 to less than $15,000)",
+            "Less than $20,000 ($15,000 to less than $20,000)",
+            "Less than $25,000 ($20,000 to less than $25,000)",
+            "Less than $50,000 ($35,000 to less than $50,000)",
+            "Less than $75,000 ($50,000 to less than $75,000)",
+            "$75,000 or more",
+          ].map((label, idx) => (
+            <label key={idx} className="flex items-center space-x-3">
+              <input
+                type="radio"
+                name="income"
+                value={idx + 1}
+                checked={data.income === idx + 1}
+                onChange={(e) => update({ income: parseInt(e.target.value) })}
+                className="form-radio h-4 w-4 text-indigo-600"
+              />
+              <span className="text-gray-700">{label}</span>
+            </label>
+          ))}
+        </div>
       </div>
-      </div>
-
     </div>
 
     <div className="flex justify-between">

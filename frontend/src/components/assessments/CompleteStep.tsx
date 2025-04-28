@@ -1,13 +1,13 @@
 import React from 'react';
-import { UserProfileData } from 'src/types/user';
+import { UserProfileUpdateData } from 'src/types/user';
 import { useLocation } from 'wouter';
-import { updateProfile } from '../../api/profile-api'
+import { updateProfile } from '../../api/profile-api';
 
 type Props = {
   next: () => void;
   prev: () => void;
-  data: UserProfileData;
-  update: (newData: Partial<UserProfileData>) => void;
+  data: UserProfileUpdateData;
+  update: (newData: Partial<UserProfileUpdateData>) => void;
 };
 
 const CompleteStep = ({ next, prev, data, update }: Props) => {
@@ -15,10 +15,16 @@ const CompleteStep = ({ next, prev, data, update }: Props) => {
 
   const handleComplete = async () => {
     try {
+      // Attempt to update the profile
       const updatedData = await updateProfile(data);
 
+      // Handle successful profile update
+      console.log("Profile updated successfully:", updatedData);
+
+      // Navigate to the home page (or another desired route)
       navigate('/');
     } catch (error) {
+      // Catch any errors and log them
       console.error("Error updating profile:", error);
     }
   };
@@ -34,11 +40,11 @@ const CompleteStep = ({ next, prev, data, update }: Props) => {
       <div className="bg-indigo-50 p-6 rounded-xl shadow-sm mb-10 border border-indigo-100 text-left">
         <h3 className="font-semibold text-indigo-800 mb-4 text-xl">Personal Information:</h3>
         <ul className="space-y-2">
-          <li><strong>Age:</strong> {data.general_data.age}</li>
-          <li><strong>Gender:</strong> {data.general_data.gender}</li>
-          <li><strong>Education Level:</strong> {data.general_data.education}</li>
-          <li><strong>Healthcare Access:</strong> {data.general_data.healthcare}</li>
-          <li><strong>Income Level:</strong> {data.general_data.income}</li>
+          <li><strong>Age:</strong> {data.age}</li>
+          <li><strong>Gender:</strong> {data.gender}</li>
+          <li><strong>Education Level:</strong> {data.education}</li>
+          <li><strong>Healthcare Access:</strong> {data.healthcare}</li>
+          <li><strong>Income Level:</strong> {data.income}</li>
         </ul>
       </div>
       
@@ -46,11 +52,11 @@ const CompleteStep = ({ next, prev, data, update }: Props) => {
       <div className="bg-indigo-50 p-6 rounded-xl shadow-sm mb-10 border border-indigo-100 text-left">
         <h3 className="font-semibold text-indigo-800 mb-4 text-xl">Lifestyle Factors:</h3>
         <ul className="space-y-2">
-          <li><strong>Smoking:</strong> {data.lifestyle.smoking}</li>
-          <li><strong>Alcohol Consumption:</strong> {data.lifestyle.alcohol}</li>
-          <li><strong>Exercise:</strong> {data.lifestyle.exercise}</li>
-          <li><strong>Vegetable Intake:</strong> {data.lifestyle.vegetable}</li>
-          <li><strong>Fruit Intake:</strong> {data.lifestyle.fruits}</li>
+          <li><strong>Smoking:</strong> {data.smoking}</li>
+          <li><strong>Alcohol Consumption:</strong> {data.alcohol}</li>
+          <li><strong>Exercise:</strong> {data.active_lifestyle}</li>
+          <li><strong>Vegetable Intake:</strong> {data.vegetables}</li>
+          <li><strong>Fruit Intake:</strong> {data.fruits}</li>
         </ul>
       </div>
 
@@ -58,13 +64,13 @@ const CompleteStep = ({ next, prev, data, update }: Props) => {
       <div className="bg-indigo-50 p-6 rounded-xl shadow-sm mb-10 border border-indigo-100 text-left">
         <h3 className="font-semibold text-indigo-800 mb-4 text-xl">Health Metrics:</h3>
         <ul className="space-y-2">
-          <li><strong>Height:</strong> {data.clinical_measurement.height} cm</li>
-          <li><strong>Weight:</strong> {data.clinical_measurement.weight} kg</li>
-          <li><strong>BMI:</strong> {data.clinical_measurement.bmi}</li>
-          <li><strong>Systolic BP:</strong> {data.clinical_measurement.systolic_bp} mmHg</li>
-          <li><strong>Diastolic BP:</strong> {data.clinical_measurement.diastolic_bp} mmHg</li>
-          <li><strong>Glucose Level:</strong> {data.clinical_measurement.glucose_level} mg/dL</li>
-          <li><strong>Total Cholesterol:</strong> {data.clinical_measurement.cholesterol_total} mg/dL</li>
+          <li><strong>Height:</strong> {data.height} cm</li>
+          <li><strong>Weight:</strong> {data.weight} kg</li>
+          <li><strong>BMI:</strong> {data.weight / ((data.weight / 100) ** 2)}</li>
+          <li><strong>Systolic BP:</strong> {data.systolic_bp} mmHg</li>
+          <li><strong>Diastolic BP:</strong> {data.diastolic_bp} mmHg</li>
+          <li><strong>Glucose Level:</strong> {data.glucose_level} mg/dL</li>
+          <li><strong>Total Cholesterol:</strong> {data.cholesterol_total} mg/dL</li>
         </ul>
       </div>
 
@@ -72,9 +78,9 @@ const CompleteStep = ({ next, prev, data, update }: Props) => {
       <div className="bg-indigo-50 p-6 rounded-xl shadow-sm mb-10 border border-indigo-100 text-left">
         <h3 className="font-semibold text-indigo-800 mb-4 text-xl">Medical History:</h3>
         <ul className="space-y-2">
-          <li><strong>Heart History:</strong> {data.medical_history.heart_history}</li>
-          <li><strong>Stroke History:</strong> {data.medical_history.stroke}</li>
-          <li><strong>Disabilitay History:</strong> {data.medical_history.disability}</li>
+          <li><strong>Heart History:</strong> {data.heart_history}</li>
+          <li><strong>Stroke History:</strong> {data.stroke}</li>
+          <li><strong>Disability History:</strong> {data.disability}</li>
         </ul>
       </div>
 

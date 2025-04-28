@@ -133,10 +133,3 @@ async def chat(request: ChatRequest, token: str = Depends(oauth2_scheme), db: Se
     reply = generate_response(user.id, request.message, db, diabetes_model, heart_model)
     return ChatResponse(response=reply)
 
-@app.get("/predict/{user_id}")
-def predict_user_health(user_id: int, db: Session = Depends(get_db)):
-
-    predictor = HeartRiskPredictor(db, model)
-    risk_score = predictor.predict(user_id)
-
-    return {"user_id": user_id, "heart_disease_risk_score": risk_score}

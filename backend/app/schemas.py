@@ -1,5 +1,6 @@
 from pydantic import BaseModel, EmailStr,  conint, confloat, constr
 from typing import Optional, Dict
+from datetime import datetime
 
 # User Registration Input
 class UserRegisterInput(BaseModel):
@@ -49,6 +50,9 @@ class UserUpdateInput(BaseModel):
     heart_history: int
     stroke: int
     disability: int
+    generalHealth: int
+    mentalHealth: int
+    physicalHealth: int
 
 # User Update Output
 class UserUpdateOutput(BaseModel):
@@ -86,6 +90,11 @@ class UserProfileOutput(BaseModel):
     heart_history: int
     stroke: int
     disability: int
+    generalHealth: int
+    mentalHealth: int
+    physicalHealth: int
+    assessment_done: int
+    assessment_done_at: datetime
 
     class Config:
         orm_mode = True

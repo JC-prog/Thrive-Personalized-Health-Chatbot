@@ -77,3 +77,17 @@ class UserHealthScore(Base):
     physicalHealth = Column(Integer, nullable=True)
 
     user = relationship("User", back_populates="health_score")
+
+class UserDiabetesPredictionHistory(Base):
+    __tablename__ = "user_diabetes_history"
+
+    id = Column(Integer, primary_key = True)
+    user_id = Column(Integer, nullable=False)
+    diabetes_risk = Column(Float, nullable=False)
+
+class UserHeartPredictionHistory(Base):
+    __tablename__ = "user_heart_history"
+
+    id = Column(Integer, primary_key = True)
+    user_id = Column(Integer, nullable=False)
+    heart_risk = Column(Float, nullable=False)
