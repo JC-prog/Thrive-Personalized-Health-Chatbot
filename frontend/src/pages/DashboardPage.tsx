@@ -50,31 +50,40 @@ const DashboardContent = () => {
   const [userProfile, setUserProfile] = useState<UserProfileData | null>(null); 
   const [riskScores, setRiskScores] = useState<UserRiskScore | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true); 
+  
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const data = await getProfile();
+        setUserProfile(data);
+      } catch (err: any) {
+        setError(err.message || "Failed to load profile");
+      } finally {
+        setLoading(false);  // Set loading to false after the profile is fetched
+      }
+    };
+
+    const fetchRiskData = async () => {
+      try {
+        const data = await getRiskScores();
+        setRiskScores(data);
+      } catch (err: any) {
+        setError(err.message || "Failed to load risk scores");
+      }
+    };
+
+    fetchProfile();
+    fetchRiskData();
+  }, []);
   
     useEffect(() => {
-      const fetchProfile = async () => {
-        try {
-          const data = await getProfile();
-          setUserProfile(data);
-        } catch (err: any) {
-          setError(err.message || "Failed to load profile");
-        }
-      };
+      if (!loading && (userProfile?.assessment_done === 0)) {
+        window.location.href = "/assessment";  
+      }
+    }, [userProfile, loading]);
+    
 
-      const fetchRiskData = async () => {
-        try {
-          const data = await getRiskScores();
-          setRiskScores(data);
-        } catch (err: any) {
-          setError(err.message || "Failed to load risk scores");
-        }
-      };
-  
-      fetchProfile();
-      fetchRiskData();
-
-    }, []);
-  
   const mapHealthScore = (x: number): number => {
     // Calculate the mapped score
     const mappedScore = 5 - (4 * (x - 1)) / 29;
