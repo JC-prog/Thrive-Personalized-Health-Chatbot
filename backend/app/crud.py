@@ -146,7 +146,7 @@ def update_user(db: Session, user: User, user_data):
         score.mentalHealth = user_data.mentalHealth
         score.physicalHealth = user_data.physicalHealth
     else:
-        db_score = UserMedicalHistory(
+        db_score = UserHealthScore(
             id=user_id,
             generalHealth=user_data.generalHealth,
             mentalHealth=user_data.mentalHealth,
