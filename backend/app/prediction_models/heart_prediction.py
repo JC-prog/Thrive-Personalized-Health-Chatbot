@@ -19,7 +19,7 @@ class HeartRiskPredictor:
         bmi = clinical.weight / (clinical.height ** 2)
         cholesterol = self.cholesterol_category(clinical.cholesterol_total)
         gender = self.gender_category(general.gender)
-
+        
         data = {
             "age": general.age,
             "height": clinical.height,

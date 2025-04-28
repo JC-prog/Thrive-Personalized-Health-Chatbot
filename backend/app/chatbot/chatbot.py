@@ -4,8 +4,10 @@ import pandas as pd
 from .embeddings import load_embeddings
 from .models.distilbert import get_embedding
 from .models.utils import cosine_similarity
+from app.prediction_models.diabetes_prediction import DiabetesRiskPredictor
+from app.prediction_models.heart_prediction import HeartRiskPredictor
 
-def generate_response(user_id: int, user_input: str) -> str:
+def generate_response(user_id: int, user_input: str, db, diabetes_model, heart_model) -> str:
     user_input = user_input.lower().strip()
 
     intent = get_intent(user_input)
@@ -16,18 +18,24 @@ def generate_response(user_id: int, user_input: str) -> str:
         return "Take care! If you have more questions, feel free to come back."
     elif intent == "predict_diabetes":
 
-        predictor = DiabetesRiskPredictor(db, model)
+        predictor = DiabetesRiskPredictor(db, diabetes_model)
         risk_score = predictor.predict(user_id)
 
         return "Your Diabetes Risk Score is: {}".format(risk_score)
 
     elif intent == "predict_heart":
 
-        predictor = HeartRiskPredictor(db, model)
+        print("Predicting Heart Risk through Chatbot")
+        print("User: " + str(user_id))
+
+        predictor = HeartRiskPredictor(db, heart_model)
         risk_score = predictor.predict(user_id)
 
         return "Your Heart Disease Risk Score is: {}".format(risk_score)
-
+    
+    elif intent == "exercice":
+        return "Exercise Intent"
+    
     user_vector = get_embedding(user_input)
     best_score = -1
     best_response = "Sorry, I don’t understand."
@@ -72,4 +80,7 @@ def get_intent(user_input: str) -> str:
             return "predict_diabetes"
         elif "heart disease" in normalized or "cardio" in normalized:
             return "predict_heart"
+    elif any(exercise in normalized for exercise in ["exercise"]):
+        return "exercise"
+    
     return "embedding"

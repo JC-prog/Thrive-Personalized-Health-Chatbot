@@ -10,7 +10,6 @@ from app.chatbot.chatbot import generate_response
 from app.schemas import ChatRequest, ChatResponse
 from app.prediction_models.heart_prediction import HeartRiskPredictor
 
-
 app = FastAPI()
 
 origins = [
@@ -38,11 +37,15 @@ def get_db():
 
 # Build the absolute path to the model file
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-MODEL_PATH = os.path.join(BASE_DIR, "best_random_forest_pipeline.pkl")
+HEART_MODEL_PATH = os.path.join(BASE_DIR, "best_random_forest_pipeline.pkl")
+DIABETES_MODEL_PATH = os.path.join(BASE_DIR, "xgboost_diabetes_pipeline.pkl")
 
 # Load the model
-with open(MODEL_PATH, "rb") as f:
-    model = pickle.load(f)
+with open(HEART_MODEL_PATH, "rb") as f:
+    heart_model = pickle.load(f)
+
+with open(DIABETES_MODEL_PATH, "rb") as f:
+    diabetes_model = pickle.load(f)
 
 # Register API
 @app.post("/register", response_model=schemas.UserRegisterOutput)
@@ -120,12 +123,14 @@ def get_user_profile(token: str = Depends(oauth2_scheme), db: Session = Depends(
 @app.post("/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest, token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     payload = auth.decode_token(token)
-
+    if payload is None:
+        raise HTTPException(status_code=401, detail="Invalid token")
+    
     username = payload.get("sub")
-    print(payload)
+
     user = crud.get_user_by_username(db, username)
 
-    reply = generate_response(user.user_id, request.message)
+    reply = generate_response(user.id, request.message, db, diabetes_model, heart_model)
     return ChatResponse(response=reply)
 
 @app.get("/predict/{user_id}")

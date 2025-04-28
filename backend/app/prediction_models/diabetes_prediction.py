@@ -19,46 +19,42 @@ class DiabetesRiskPredictor:
     
     def preprocess(self, general, clinical, lifestyle, history, score):
         bmi = clinical.weight / (clinical.height ** 2)
-        sex = self.gender_category(general.gender)
         cholesterol = self.cholesterol_category(clinical.cholesterol_total)
         bp = self.bp_category(clinical.systolic_bp, clinical.diastolic_bp)
 
         data = {
-            "Age": general.age,
-            "Sex": sex,
-            "Education": general.education,
-            "AnyHealthcare": general.healtcare,
-            "Income": general.income,
-            "BMI": bmi,
-            "HighBP": bp,
+            "HighBP" : bp,
             "HighChol": cholesterol,
+            "CholCheck": cholesterol,
+            "BMI": bmi,
             "Smoker": lifestyle.smoking,
-            "PhysAcitivity": lifestyle.active_lifestyle,
-            "AlcoholConsumption": lifestyle.alcohol,
-            "Veggies": lifestyle.vegetables,
-            "Fruits": lifestyle.fruits,
-            "HeartDiseaseHistory": history.heart_history,
             "Stroke": history.stroke,
-            "DiffWalk": history.disability,
+            "HeartDiseaseorAttack": history.heart_history,
+            "PhysActivity": lifestyle.active_lifestyle,
+            "Fruits": lifestyle.fruits,
+            "Veggies": lifestyle.vegetables,
+            "HvyAlcoholConsump": lifestyle.alcohol,
+            "AnyHealthcare": 1,
+            "NoDocbcCost": 0,
             "GenHlth": score.generalHealth,
             "MentHlth": score.mentalHealth,
-            "PhysHlth": score.physicalHealth
+            "PhysHlth": score.physicalHealth,
+            "DiffWalk": history.disability,
+            "Sex": general.gender,
+            "Age": general.age,
+            "Education": general.education,
+            "Income": general.income,
         }
+
+        print(data)
 
         return pd.DataFrame([data])
 
     def predict(self, user_id: int):
-        general, clinical, lifestyle = self.get_user_data(user_id)
-        df = self.preprocess(general, clinical, lifestyle)
+        general, clinical, lifestyle, history, score = self.get_user_data(user_id)
+        df = self.preprocess(general, clinical, lifestyle, history, score)
 
         return self.model.predict_proba(df)[0][1]
-    
-    @staticmethod
-    def gender_category(gender):
-        if gender.lower() == "male":
-            return 1
-        else:
-            return 0
 
     @staticmethod
     def cholesterol_category(cholesterol):
