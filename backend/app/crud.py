@@ -2,6 +2,8 @@ from sqlalchemy.orm import Session
 from . import models
 from passlib.context import CryptContext
 from app.models import *
+from app.schemas import *
+from datetime import datetime
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -36,9 +38,20 @@ def create_user(db: Session, user_data):
 def get_user_by_username(db: Session, username: str):
     return db.query(models.User).filter(models.User.username == username).first()
 
+# Verify User Password
+# Used by Login
+def verify_password(plain_password, hashed_password):
+
+    return pwd_context.verify(plain_password, hashed_password)
+
 # Update User 
 # Used by update_user
-def update_user(db: Session, user_id: int, user_data):
+def update_user(db: Session, user: User, user_data):
+
+    user_id = user.id
+
+    user.assessment_done = True
+    user.assessment_done_at = datetime.now()
 
     # General Table
     general = db.query(UserGeneralData).filter_by(id=user_id).first()
@@ -91,6 +104,7 @@ def update_user(db: Session, user_id: int, user_data):
     if clinical:
         clinical.height = user_data.height
         clinical.weight = user_data.weight
+        clinical.bmi = user_data.weight / (user_data.height ** 2)
         clinical.systolic_bp = user_data.systolic_bp
         clinical.diastolic_bp = user_data.diastolic_bp
         clinical.glucose_level = user_data.glucose_level
@@ -100,6 +114,7 @@ def update_user(db: Session, user_id: int, user_data):
             id=user_id,
             height=user_data.height,
             weight=user_data.weight,
+            bmi = user_data.weight / (user_data.height ** 2),
             systolic_bp=user_data.systolic_bp,
             diastolic_bp=user_data.diastolic_bp,
             glucose_level=user_data.glucose_level,
@@ -127,6 +142,7 @@ def update_user(db: Session, user_id: int, user_data):
     db.commit()
 
     # Optionally return the updated data for confirmation or further use
+    db.refresh(user)
     db.refresh(general if general else db_general)
     db.refresh(lifestyle if lifestyle else db_lifestyle)
     db.refresh(clinical if clinical else db_clinical)
@@ -134,12 +150,45 @@ def update_user(db: Session, user_id: int, user_data):
 
     return {"status": "success", "message": "User updated successfully"}
 
-
-
-
-def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
-
 # User Profile Retrieval
-def get_user_profile_by_username(db: Session, username: str):
-    return db.query(models.User).filter(models.User.username == username).first()
+def get_user_profile_by_username(db: Session, username: str) -> UserProfileOutput:
+    user = db.query(models.User).filter(models.User.username == username).first()
+    
+    if user is None:
+        return None 
+
+    user_id = user.id
+
+    general = db.query(UserGeneralData).filter_by(id=user_id).first()
+    lifestyle = db.query(UserLifeStyleInformation).filter_by(id=user_id).first()
+    clinical = db.query(UserClinicalMeasurement).filter_by(id=user_id).first()
+    medical_history = db.query(UserMedicalHistory).filter_by(id=user_id).first()
+
+    output = UserProfileOutput(
+        id = user.id,
+        name = user.name,
+        username = user.username,
+        age = general.age,
+        gender = general.gender,
+        education = general.education,
+        healthcare = general.healthcare,
+        income = general.income,
+        smoking = lifestyle.smoking,
+        alcohol = lifestyle.alcohol,
+        active_lifestyle = lifestyle.active_lifestyle,
+        vegetables = lifestyle.vegetables,
+        fruits = lifestyle.fruits,
+        height = clinical.height,
+        weight = clinical.weight,
+        bmi = clinical.weight / (clinical.height ** 2),
+        systolic_bp = clinical.systolic_bp,
+        diastolic_bp = clinical.diastolic_bp,
+        glucose_level = clinical.glucose_level,
+        cholesterol_total = clinical.cholesterol_total,
+        heart_history = medical_history.heart_history,
+        stroke = medical_history.stroke,
+        disability = medical_history.disability
+    )
+
+    return output
+

@@ -17,9 +17,8 @@ class HeartRiskPredictor:
 
     def preprocess(self, general, clinical, lifestyle):
         bmi = clinical.weight / (clinical.height ** 2)
-        gender = self.gender_category(general.gender)
         cholesterol = self.cholesterol_category(clinical.cholesterol_total)
-
+        gender = self.gender_category(general.gender)
 
         data = {
             "age": general.age,
@@ -29,13 +28,16 @@ class HeartRiskPredictor:
             "ap_hi": clinical.systolic_bp,
             "ap_lo": clinical.diastolic_bp,
             "cholesterol": cholesterol,
-            "gluc": 1,
+            "gluc": self.glucose_category(clinical.glucose_level),
             "smoke": lifestyle.smoking,
             "alco": lifestyle.alcohol,
             "active": lifestyle.active_lifestyle,
             "BMI": self.bmi_category(bmi),
             "BP": self.bp_category(clinical.systolic_bp, clinical.diastolic_bp)
         }
+
+        print(data)
+
         return pd.DataFrame([data])
 
     def predict(self, user_id: int):
@@ -65,17 +67,26 @@ class HeartRiskPredictor:
         return 'Hypertension Stage 2'
 
     @staticmethod
-    def gender_category(gender):
-        if gender.lower() == "male":
-            return 1
-        else:
-            return 2
-
-    @staticmethod
     def cholesterol_category(cholesterol):
         if cholesterol < 200:
-            return 0
+            return 1 # Low
         elif cholesterol < 240:
-            return 1
+            return 2 # Medium
         else:
-            return 2
+            return 3 # High
+        
+    @staticmethod
+    def glucose_category(glucose):
+        if glucose < 6.1:
+            return 1
+        elif glucose < 7:
+            return 2 
+        else:
+            return 3
+        
+    @staticmethod
+    def gender_category(gender):
+        if gender == 1:
+            return 1 # Male
+        else:
+            return 2 # Female

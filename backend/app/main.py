@@ -60,7 +60,7 @@ def login(user_data: schemas.UserLoginInput, db: Session = Depends(get_db)):
     user = crud.get_user_by_username(db, user_data.username)
     if not user:
         raise HTTPException(
-            status_code=status.HTTP_404_NOTFOUND,
+            status_code=status.HTTP_404_NOT_FOUND,
             detail="User is not registered"
         )
     if not user or not auth.verify_password(user_data.password, user.hashed_password):
@@ -93,28 +93,30 @@ def update_user(
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
 
-    crud.update_user(db, user.id, user_data)
+    crud.update_user(db, user, user_data)
 
     return {
         "status": "success",
         "message": "User updated successfully"
     }
 
-
-@app.get("/me", response_model=schemas.UserProfileOut)
-def read_users_me(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+# Get User Profile API
+@app.get("/me", response_model=schemas.UserProfileOutput)
+def get_user_profile(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     payload = auth.decode_token(token)
     if payload is None:
         raise HTTPException(status_code=401, detail="Invalid token")
-    email = payload.get("sub")
-    print(payload)
-    user = crud.get_user_by_username(db, email)
+    
+    username = payload.get("sub")
+
+    user = crud.get_user_profile_by_username(db, username)
+
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
+    
     return user
 
-
-
+# Chat API
 @app.post("/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest, token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     payload = auth.decode_token(token)
