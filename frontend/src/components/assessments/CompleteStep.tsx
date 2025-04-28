@@ -89,8 +89,8 @@ const CompleteStep = ({ next, prev, data, update }: Props) => {
         <h3 className="font-semibold text-indigo-800 mb-4 text-xl">Health Score:</h3>
         <ul className="space-y-2">
           <li><strong>General Health:</strong> {data.generalHealth}</li>
-          <li><strong>Stroke History:</strong> {data.mentalHealth}</li>
-          <li><strong>Disability History:</strong> {data.physicalHealth}</li>
+          <li><strong>Mental Health:</strong> {data.mentalHealth}</li>
+          <li><strong>Physical Health:</strong> {data.physicalHealth}</li>
         </ul>
       </div>
 

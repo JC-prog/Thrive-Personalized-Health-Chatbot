@@ -77,30 +77,34 @@ const HealthScoreStep = ({ next, prev, data, update }: Props) => {
 
         {/* Mental Health */}
         <div>
-          <label className="block text-gray-700 font-semibold mb-2">How would you rate your mental health? ( 1 = Best, 30 = Worst )</label>
-          <select
-            name="mentalHealth"
-            value={mentalHealth}
-            onChange={handleChange}
-            className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
-          >
-            <option value="">Select</option>
-            {generateOptions()}
-          </select>
+            <label className="block text-gray-700 font-semibold mb-2">
+                In the past 30 days, how many days did you feel that your mental health (stress, depression, emotional issues) was not good? (1–30 days)
+            </label>
+            <select
+                name="mentalHealth"
+                value={mentalHealth}
+                onChange={handleChange}
+                className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
+            >
+                <option value="">Select</option>
+                {generateOptions()} {/* This will generate options from 1 to 30 */}
+            </select>
         </div>
 
         {/* Physical Health */}
         <div>
-          <label className="block text-gray-700 font-semibold mb-2">How would you rate your physical health? ( 1 = Best, 30 = Worst )</label>
-          <select
-            name="physicalHealth"
-            value={physicalHealth}
-            onChange={handleChange}
-            className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
-          >
-            <option value="">Select</option>
-            {generateOptions()}
-          </select>
+            <label className="block text-gray-700 font-semibold mb-2">
+                In the past 30 days, how many days was your physical health (illness or injury) not good? (1–30 days)
+            </label>
+            <select
+                name="physicalHealth"
+                value={physicalHealth}
+                onChange={handleChange}
+                className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
+            >
+                <option value="">Select</option>
+                {generateOptions()} {/* This will generate options from 1 to 30 */}
+            </select>
         </div>
       </div>
 
