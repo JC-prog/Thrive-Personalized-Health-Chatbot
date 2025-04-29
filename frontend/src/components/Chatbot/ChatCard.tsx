@@ -43,50 +43,52 @@ const ChatCard = () => {
   };
 
   return (
-    <div className="w-full mx-auto bg-white shadow-lg rounded-lg p-6">
-      {/* Chat History */}
-      <div className="space-y-4 max-h-[60vh] min-h-60 overflow-y-auto p-4 bg-gray-100 rounded-lg shadow-inner">
-        {messages.map((message, index) => (
-          <div
-            key={index}
-            className={`flex ${message.type === "user" ? "justify-end" : "justify-start"}`}
-          >
+      <div className="w-full h-full flex flex-col bg-white shadow-lg rounded-lg p-6">
+        {/* Chat History */}
+        <div className="flex-1 overflow-y-auto space-y-4 p-4 bg-gray-100 rounded-lg shadow-inner">
+          {messages.map((message, index) => (
             <div
-              className={`max-w-ws p-3 rounded-lg text-white ${
-                message.type === "user" ? "bg-indigo-600 text-right" : "bg-gray-700 text-left"
-              }`}
+              key={index}
+              className={`flex ${message.type === "user" ? "justify-end" : "justify-start"}`}
             >
-              {message.text}
+              <div
+                className={`max-w-ws p-3 rounded-lg text-white ${
+                  message.type === "user"
+                    ? "bg-indigo-600 text-right"
+                    : "bg-gray-700 text-left"
+                }`}
+              >
+                {message.text}
+              </div>
             </div>
+          ))}
+          <div ref={messagesEndRef} />
+        </div>
+    
+        {/* Input Section */}
+        <div className="mt-4 flex-shrink-0">
+          <div className="flex items-center border border-gray-300 rounded-lg">
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Type your message..."
+              className="w-full p-3 bg-gray-100 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              disabled={loading}
+            />
+            <button
+              onClick={handleSend}
+              className={`px-4 py-3 ${
+                loading ? "bg-gray-400" : "bg-indigo-600 hover:bg-indigo-700"
+              } text-white rounded-r-lg focus:outline-none focus:ring-2 focus:ring-indigo-500`}
+              disabled={loading}
+            >
+              {loading ? "Sending..." : "Send"}
+            </button>
           </div>
-        ))}
-        <div ref={messagesEndRef} />
-      </div>
-
-      {/* Input Section */}
-      <div className="mt-4">
-        <div className="flex items-center border border-gray-300 rounded-lg">
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder="Type your message..."
-            className="w-full p-3 bg-gray-100 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            disabled={loading} // Disable input while loading
-          />
-          <button
-            onClick={handleSend}
-            className={`px-4 py-3 ${
-              loading ? "bg-gray-400" : "bg-indigo-600 hover:bg-indigo-700"
-            } text-white rounded-r-lg focus:outline-none focus:ring-2 focus:ring-indigo-500`}
-            disabled={loading} // Disable button while loading
-          >
-            {loading ? "Sending..." : "Send"}
-          </button>
         </div>
       </div>
-    </div>
   );
 };
 

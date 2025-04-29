@@ -27,17 +27,21 @@ const Card = ({
 );
 
 const ChatbotContent = () => (
-  <div className="flex-1 bg-slate-50 p-8 min-h-screen">
+  <div className="flex-1 flex flex-col bg-slate-50 p-8 overflow-hidden">
     <h1 className="text-3xl font-bold mb-6 text-slate-800">Chatbot</h1>
-    <ChatCard />
+    <div className="flex-1 overflow-hidden">
+      <ChatCard />
+    </div>
   </div>
 );
 
+
 const ChatPage = () => (
-  <div className="flex font-sans">
+  <div className="flex h-screen font-sans overflow-hidden">
     <Sidebar />
     <ChatbotContent />
   </div>
 );
+
 
 export default ChatPage;
