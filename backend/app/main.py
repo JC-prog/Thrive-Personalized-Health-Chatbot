@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from fastapi.middleware.cors import CORSMiddleware
 from . import models, schemas, crud, database, auth
-from app.chatbot.chatbot import generate_response
+from app.chatbot.chatbot import generate_response, generate_response_openai
 from app.schemas import ChatRequest, ChatResponse, UserRiskScore
 from app.prediction_models.heart_prediction import HeartRiskPredictor
 from app.prediction_models.diabetes_prediction import DiabetesRiskPredictor
@@ -135,13 +135,13 @@ def get_user_profile(token: str = Depends(oauth2_scheme), db: Session = Depends(
 async def chat(request: ChatRequest, token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     payload = auth.decode_token(token)
     if payload is None:
-        raise HTTPException(status_code=401, detail="Invalid token")
+        raise HTTPException(status_code=401, detail="Oops, Invalid token error happens!")
     
     username = payload.get("sub")
 
     user = crud.get_user_by_username(db, username)
 
-    reply = generate_response(user.id, request.message, db, diabetes_model, heart_model)
+    reply = generate_response_openai(user.id, request.message, db, diabetes_model, heart_model)
     return ChatResponse(response=reply)
 
 # Get Historical Risk Score
