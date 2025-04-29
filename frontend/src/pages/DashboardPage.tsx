@@ -137,7 +137,9 @@ const DashboardContent = () => {
           <div className="rounded-2xl p-6 bg-red-100 flex flex-col items-center justify-center shadow-md">
             <h3 className="text-lg font-semibold text-slate-800 mb-2">Heart Disease Risk</h3>
             <p className="text-3xl font-bold text-red-600">
-              {riskScores?.heart_risk.toFixed(2) ?? "-"}%
+              {riskScores?.heart_risk != null
+              ? (riskScores.heart_risk * 100).toFixed(2) + "%"
+              : "-"}
             </p>
           </div>
 
@@ -145,7 +147,9 @@ const DashboardContent = () => {
           <div className="rounded-2xl p-6 bg-blue-100 flex flex-col items-center justify-center shadow-md">
             <h3 className="text-lg font-semibold text-slate-800 mb-2">Diabetes Risk</h3>
             <p className="text-3xl font-bold text-blue-600">
-              {riskScores?.diabetes_risk.toFixed(2) ?? "-"}%
+            {riskScores?.diabetes_risk != null
+            ? (riskScores.diabetes_risk * 100).toFixed(2) + "%"
+            : "-"}
             </p>
           </div>
         </div>
