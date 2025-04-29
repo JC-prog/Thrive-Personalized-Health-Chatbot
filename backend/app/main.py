@@ -38,7 +38,7 @@ def get_db():
 
 # Build the absolute path to the model file
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-HEART_MODEL_PATH = os.path.join(BASE_DIR, "best_random_forest_pipeline.pkl")
+HEART_MODEL_PATH = os.path.join(BASE_DIR, "best_random_forest_model.pkl")
 DIABETES_MODEL_PATH = os.path.join(BASE_DIR, "xgboost_diabetes_pipeline.pkl")
 
 # Load the model
