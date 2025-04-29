@@ -6,6 +6,10 @@ __pycache__/
 # Ignore virtual environments
 venv/
 venv-310/
+venv_python310/
 
 # Ignore VSCode settings if you use VSCode
 .vscode/
+
+# Ignore env files
+.env
