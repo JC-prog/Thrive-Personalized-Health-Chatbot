@@ -1,0 +1,46 @@
+services:
+  db:
+    image: mysql:5.7
+    platform: linux/amd64  
+    container_name: thrive_db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: healthcare_chatbot
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - thrive_network
+    ports:
+      - "3306:3306"  # Bind MySQL to port 3306 on localhost for external access
+    restart: always
+
+  backend:
+    build:
+      context: . 
+      dockerfile: backend/Dockerfile
+    container_name: thrive_backend
+    depends_on:
+      - db
+    networks:
+      - thrive_network
+    ports:
+      - "8000:8000"  # Bind backend to port 8000 on localhost
+    restart: always
+    environment:
+      DB_HOST: "localhost"  # Use localhost to connect to db service inside container
+      DB_PORT: "3306"  # Specify the port for DB connection
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: thrive_chatbot
+    networks:
+      - thrive_network
+    ports:
+      - "5173:5173"  # Bind frontend to port 5173 on localhost
+    restart: always
+
+networks:
+  thrive_network:
+    driver: bridge
