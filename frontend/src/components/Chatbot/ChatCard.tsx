@@ -60,7 +60,7 @@ const ChatCard = () => {
   const handleSend = async () => {
     if (!input.trim() || loading) return; // Prevent empty messages or multiple submissions
 
-    const userMessage = { text: messageToSend, type: "user" as const };
+    const userMessage = { text: input, type: "user" as const };
     setMessages((prevMessages) => [...prevMessages, userMessage]);
     setInput("");
     setLoading(true);
@@ -312,20 +312,16 @@ const ChatCard = () => {
             key={index}
             className={`flex ${message.type === "user" ? "justify-end" : "justify-start"}`}
           >
-            <div
-              key={index}
-              className={`flex ${message.type === "user" ? "justify-end" : "justify-start"}`}
-            >
-              {typeof message.text === "string" ? (
-                <div dangerouslySetInnerHTML={{ __html: message.text }} />
-              ) : (
-                <pre className="whitespace-pre-wrap">{JSON.stringify(message.text, null, 2)}</pre>
-              )}
-            </div>
-          ))
-        )}
+            {typeof message.text === "string" ? (
+              <div dangerouslySetInnerHTML={{ __html: message.text }} />
+            ) : (
+              <pre className="whitespace-pre-wrap">{JSON.stringify(message.text, null, 2)}</pre>
+            )}
+          </div>
+        ))}
         <div ref={messagesEndRef} />
       </div>
+
 
       {/* Sample Prompts */}
       <div className="mt-4 space-y-2">
