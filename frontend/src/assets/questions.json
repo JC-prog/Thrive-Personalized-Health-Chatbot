@@ -1,0 +1,629 @@
+[
+    {
+        "question": "Does obesity affect heart health?"
+    },
+    {
+        "question": "Could alcohol bad for heart health?"
+    },
+    {
+        "question": "Would it help to high cholesterol cause heart problems?"
+    },
+    {
+        "question": "Explain how can I prevent cardiovascular disease?"
+    },
+    {
+        "question": "Give me details about surgeries treat heart disease?"
+    },
+    {
+        "question": "Should diabetics monitor heart health closely?"
+    },
+    {
+        "question": "Could you describe increases the risk of heart disease?"
+    },
+    {
+        "question": "Please explain how should I act if I see stroke symptoms?"
+    },
+    {
+        "question": "Does exercise help prevent heart disease?"
+    },
+    {
+        "question": "What should I do during a heart attack?"
+    },
+    {
+        "question": "Could heart disease and cardiovascular disease the same?"
+    },
+    {
+        "question": "Could high cholesterol cause heart problems?"
+    },
+    {
+        "question": "Does blood pressure monitoring important?"
+    },
+    {
+        "question": "Would blood pressure monitoring important?"
+    },
+    {
+        "question": "Tell me about are signs of a heart attack?"
+    },
+    {
+        "question": "Please explain how is cardiovascular disease diagnosed?"
+    },
+    {
+        "question": "Could you describe surgeries treat heart disease?"
+    },
+    {
+        "question": "How do I know if I'm having a stroke?"
+    },
+    {
+        "question": "Is it possible to a healthy diet lower heart disease risk?"
+    },
+    {
+        "question": "Would it help to you explain CVD?"
+    },
+    {
+        "question": "Is it possible to you explain CVD?"
+    },
+    {
+        "question": "Please explain how often should I check my blood pressure?"
+    },
+    {
+        "question": "What increases the risk of heart disease?"
+    },
+    {
+        "question": "Please explain increases the risk of heart disease?"
+    },
+    {
+        "question": "Is heart disease and cardiovascular disease the same?"
+    },
+    {
+        "question": "Could you describe how does smoking affect the heart?"
+    },
+    {
+        "question": "Might alcohol bad for heart health?"
+    },
+    {
+        "question": "In what way often should I check my blood pressure?"
+    },
+    {
+        "question": "Explain how can I manage stress for heart health?"
+    },
+    {
+        "question": "What is cardiovascular disease?"
+    },
+    {
+        "question": "Would it help to a healthy diet lower heart disease risk?"
+    },
+    {
+        "question": "Could you describe tests check for heart problems?"
+    },
+    {
+        "question": "Is it possible to you explain increases the risk of heart disease?"
+    },
+    {
+        "question": "Would heart disease and cardiovascular disease the same?"
+    },
+    {
+        "question": "In what way can I prevent cardiovascular disease?"
+    },
+    {
+        "question": "Is it possible to you explain how do I know if I'm having a stroke?"
+    },
+    {
+        "question": "Explain how does smoking affect the heart?"
+    },
+    {
+        "question": "What surgeries treat heart disease?"
+    },
+    {
+        "question": "How can I manage stress for heart health?"
+    },
+    {
+        "question": "Explain how should I act if I see stroke symptoms?"
+    },
+    {
+        "question": "Explain a healthy diet lower heart disease risk?"
+    },
+    {
+        "question": "In what way does smoking affect the heart?"
+    },
+    {
+        "question": "In what way should I act if I see stroke symptoms?"
+    },
+    {
+        "question": "Can you explain should I do during a heart attack?"
+    },
+    {
+        "question": "Might heart disease and cardiovascular disease the same?"
+    },
+    {
+        "question": "Explain medication manage cardiovascular disease?"
+    },
+    {
+        "question": "Is it possible to aspirin help during a heart attack?"
+    },
+    {
+        "question": "Please explain how do I know if I'm having a stroke?"
+    },
+    {
+        "question": "Would it help to you explain symptoms should make me call emergency services?"
+    },
+    {
+        "question": "What symptoms should make me call emergency services?"
+    },
+    {
+        "question": "How can I prevent cardiovascular disease?"
+    },
+    {
+        "question": "Please explain CVD?"
+    },
+    {
+        "question": "What are signs of a heart attack?"
+    },
+    {
+        "question": "Tell me about symptoms should make me call emergency services?"
+    },
+    {
+        "question": "Would it help to medication manage cardiovascular disease?"
+    },
+    {
+        "question": "Would it help to you explain how should I act if I see stroke symptoms?"
+    },
+    {
+        "question": "Please explain CVD?"
+    },
+    {
+        "question": "How should I act if I see stroke symptoms?"
+    },
+    {
+        "question": "Could you describe how is cardiovascular disease diagnosed?"
+    },
+    {
+        "question": "Is it possible to high cholesterol cause heart problems?"
+    },
+    {
+        "question": "Could you describe how is heart disease treated?"
+    },
+    {
+        "question": "Is it possible to medication manage cardiovascular disease?"
+    },
+    {
+        "question": "Would cholesterol monitoring important?"
+    },
+    {
+        "question": "How does smoking affect the heart?"
+    },
+    {
+        "question": "Could you describe how can I prevent cardiovascular disease?"
+    },
+    {
+        "question": "Could you describe how can I manage stress for heart health?"
+    },
+    {
+        "question": "Please explain how is cardiovascular disease diagnosed?"
+    },
+    {
+        "question": "Can medication manage cardiovascular disease?"
+    },
+    {
+        "question": "Explain how is heart disease treated?"
+    },
+    {
+        "question": "Explain aspirin help during a heart attack?"
+    },
+    {
+        "question": "Could you describe how often should I check my blood pressure?"
+    },
+    {
+        "question": "Does cholesterol monitoring important?"
+    },
+    {
+        "question": "What tests check for heart problems?"
+    },
+    {
+        "question": "How often should I check my blood pressure?"
+    },
+    {
+        "question": "Can high cholesterol cause heart problems?"
+    },
+    {
+        "question": "How is heart disease treated?"
+    },
+    {
+        "question": "Could you describe are signs of a heart attack?"
+    },
+    {
+        "question": "Does alcohol bad for heart health?"
+    },
+    {
+        "question": "Could cholesterol monitoring important?"
+    },
+    {
+        "question": "Could blood pressure monitoring important?"
+    },
+    {
+        "question": "Is it possible to you explain how should I act if I see stroke symptoms?"
+    },
+    {
+        "question": "Please explain are signs of a heart attack?"
+    },
+    {
+        "question": "Could I a healthy diet lower heart disease risk?"
+    },
+    {
+        "question": "Give me details about is cardiovascular disease?"
+    },
+    {
+        "question": "Please explain how should I act if I see stroke symptoms?"
+    },
+    {
+        "question": "Please explain how can I manage stress for heart health?"
+    },
+    {
+        "question": "Might cholesterol monitoring important?"
+    },
+    {
+        "question": "Please explain is cardiovascular disease?"
+    },
+    {
+        "question": "Could you describe is cardiovascular disease?"
+    },
+    {
+        "question": "Can aspirin help during a heart attack?"
+    },
+    {
+        "question": "Please explain how does smoking affect the heart?"
+    },
+    {
+        "question": "Is blood pressure monitoring important?"
+    },
+    {
+        "question": "Would alcohol bad for heart health?"
+    },
+    {
+        "question": "Could you describe should I do during a heart attack?"
+    },
+    {
+        "question": "Could you describe how do I know if I'm having a stroke?"
+    },
+    {
+        "question": "Might blood pressure monitoring important?"
+    },
+    {
+        "question": "Explain how often should I check my blood pressure?"
+    },
+    {
+        "question": "Is cholesterol monitoring important?"
+    },
+    {
+        "question": "Give me details about increases the risk of heart disease?"
+    },
+    {
+        "question": "Please explain surgeries treat heart disease?"
+    },
+    {
+        "question": "Give me details about are signs of a heart attack?"
+    },
+    {
+        "question": "Is it possible to you explain how is cardiovascular disease diagnosed?"
+    },
+    {
+        "question": "Give me details about tests check for heart problems?"
+    },
+    {
+        "question": "Is it possible to you explain symptoms should make me call emergency services?"
+    },
+    {
+        "question": "Does heart disease and cardiovascular disease the same?"
+    },
+    {
+        "question": "Give me details about symptoms should make me call emergency services?"
+    },
+    {
+        "question": "Could you describe symptoms should make me call emergency services?"
+    },
+    {
+        "question": "Can you explain how do I know if I'm having a stroke?"
+    },
+    {
+        "question": "Would it help to you explain how is heart disease treated?"
+    },
+    {
+        "question": "Please explain is cardiovascular disease?"
+    },
+    {
+        "question": "Tell me about tests check for heart problems?"
+    },
+    {
+        "question": "How is cardiovascular disease diagnosed?"
+    },
+    {
+        "question": "In what way do I know if I'm having a stroke?"
+    },
+    {
+        "question": "Could I high cholesterol cause heart problems?"
+    },
+    {
+        "question": "Could I aspirin help during a heart attack?"
+    },
+    {
+        "question": "Can you explain CVD?"
+    },
+    {
+        "question": "Can a healthy diet lower heart disease risk?"
+    },
+    {
+        "question": "Is it possible to you explain is cardiovascular disease?"
+    },
+    {
+        "question": "In what way is heart disease treated?"
+    },
+    {
+        "question": "Can you explain increases the risk of heart disease?"
+    },
+    {
+        "question": "Would it help to aspirin help during a heart attack?"
+    },
+    {
+        "question": "Tell me about should I do during a heart attack?"
+    },
+    {
+        "question": "Would it help to you explain how can I manage stress for heart health?"
+    },
+    {
+        "question": "In what way can I manage stress for heart health?"
+    },
+    {
+        "question": "Give me details about should I do during a heart attack?"
+    },
+    {
+        "question": "Could I medication manage cardiovascular disease?"
+    },
+    {
+        "question": "Tell me about surgeries treat heart disease?"
+    },
+    {
+        "question": "Is alcohol bad for heart health?"
+    },
+    {
+        "question": "Would it help to you explain are signs of a heart attack?"
+    },
+    {
+        "question": "Would it help to you explain how does smoking affect the heart?"
+    },
+    {
+        "question": "Can you explain how can I prevent cardiovascular disease?"
+    },
+    {
+        "question": "Tell me about increases the risk of heart disease?"
+    },
+    {
+        "question": "Is it possible to you explain how can I prevent cardiovascular disease?"
+    },
+    {
+        "question": "Can you explain how does smoking affect the heart?"
+    },
+    {
+        "question": "Could you describe how should I act if I see stroke symptoms?"
+    },
+    {
+        "question": "Can you explain how should I act if I see stroke symptoms?"
+    },
+    {
+        "question": "Can you explain symptoms should make me call emergency services?"
+    },
+    {
+        "question": "Please explain should I do during a heart attack?"
+    },
+    {
+        "question": "Would it help to you explain how do I know if I'm having a stroke?"
+    },
+    {
+        "question": "Explain how is cardiovascular disease diagnosed?"
+    },
+    {
+        "question": "Explain how do I know if I'm having a stroke?"
+    },
+    {
+        "question": "Please explain symptoms should make me call emergency services?"
+    },
+    {
+        "question": "Please explain how can I manage stress for heart health?"
+    },
+    {
+        "question": "Please explain should I do during a heart attack?"
+    },
+    {
+        "question": "Please explain how often should I check my blood pressure?"
+    },
+    {
+        "question": "Please explain how is heart disease treated?"
+    },
+    {
+        "question": "Is it possible to you explain tests check for heart problems?"
+    },
+    {
+        "question": "Is it possible to you explain how can I manage stress for heart health?"
+    },
+    {
+        "question": "Can you explain how can I manage stress for heart health?"
+    },
+    {
+        "question": "Would it help to you explain should I do during a heart attack?"
+    },
+    {
+        "question": "Would it help to you explain tests check for heart problems?"
+    },
+    {
+        "question": "In what way is cardiovascular disease diagnosed?"
+    },
+    {
+        "question": "Please explain how do I know if I'm having a stroke?"
+    },
+    {
+        "question": "Would it help to you explain how can I prevent cardiovascular disease?"
+    },
+    {
+        "question": "Please explain increases the risk of heart disease?"
+    },
+    {
+        "question": "Is it possible to you explain should I do during a heart attack?"
+    },
+    {
+        "question": "Would it help to you explain how is cardiovascular disease diagnosed?"
+    },
+    {
+        "question": "Tell me about is cardiovascular disease?"
+    },
+    {
+        "question": "How does diabetes affect the immune system?"
+    },
+    {
+        "question": "What is Type 2 diabetes?"
+    },
+    {
+        "question": "How does smoking affect diabetes?"
+    },
+    {
+        "question": "Can diabetes cause eye problems?"
+    },
+    {
+        "question": "Can diabetes affect pregnancy?"
+    },
+    {
+        "question": "How is diabetes treated?"
+    },
+    {
+        "question": "What is diabetic ketoacidosis?"
+    },
+    {
+        "question": "How important is regular medical check-up for diabetes management?"
+    },
+    {
+        "question": "Can diabetes be prevented?"
+    },
+    {
+        "question": "How do blood sugar levels affect health?"
+    },
+    {
+        "question": "What are the early signs of diabetes?"
+    },
+    {
+        "question": "What lifestyle changes can help manage diabetes?"
+    },
+    {
+        "question": "What are the risk factors for Type 2 diabetes?"
+    },
+    {
+        "question": "What are the long-term effects of diabetes?"
+    },
+    {
+        "question": "What is hyperglycemia?"
+    },
+    {
+        "question": "What is the impact of diabetes on daily life?"
+    },
+    {
+        "question": "What role does exercise play in managing diabetes?"
+    },
+    {
+        "question": "Can diabetes be cured?"
+    },
+    {
+        "question": "What is hypoglycemia?"
+    },
+    {
+        "question": "How can technology help in managing diabetes?"
+    },
+    {
+        "question": "What is the difference between Type 1 and Type 2 diabetes?"
+    },
+    {
+        "question": "What is insulin resistance?"
+    },
+    {
+        "question": "How often should people with diabetes check their blood sugar?"
+    },
+    {
+        "question": "What is continuous glucose monitoring?"
+    },
+    {
+        "question": "How does diet affect diabetes?"
+    },
+    {
+        "question": "What is Type 1 diabetes?"
+    },
+    {
+        "question": "What is the role of genetics in diabetes?"
+    },
+    {
+        "question": "What is diabetic neuropathy?"
+    },
+    {
+        "question": "What is a diabetic diet?"
+    },
+    {
+        "question": "Is diabetes hereditary?"
+    },
+    {
+        "question": "What are the main types of diabetes?"
+    },
+    {
+        "question": "Can diabetes lead to cardiovascular disease?"
+    },
+    {
+        "question": "How does stress affect diabetes?"
+    },
+    {
+        "question": "Can alcohol consumption affect diabetes?"
+    },
+    {
+        "question": "What are diabetic foot problems?"
+    },
+    {
+        "question": "Can pets get diabetes?"
+    },
+    {
+        "question": "What are the common myths about diabetes?"
+    },
+    {
+        "question": "What are the complications of diabetes?"
+    },
+    {
+        "question": "What causes diabetes?"
+    },
+    {
+        "question": "Can diabetes affect mental health?"
+    },
+    {
+        "question": "What medications are used to treat diabetes?"
+    },
+    {
+        "question": "How can weight loss impact diabetes?"
+    },
+    {
+        "question": "What is insulin therapy?"
+    },
+    {
+        "question": "What is gestational diabetes?"
+    },
+    {
+        "question": "What is a diabetes care plan?"
+    },
+    {
+        "question": "What is an HbA1c test?"
+    },
+    {
+        "question": "How does diabetes affect the kidneys?"
+    },
+    {
+        "question": "What is diabetes?"
+    },
+    {
+        "question": "Can children get diabetes?"
+    },
+    {
+        "question": "What are the symptoms of diabetes?"
+    },
+    {
+        "question": "How is diabetes diagnosed?"
+    }
+]
