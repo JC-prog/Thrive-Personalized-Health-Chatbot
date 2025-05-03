@@ -235,3 +235,19 @@ def get_user_heart_risk(db: Session, user_id: int):
     if result:
         return result.heart_risk
     return None
+
+# Get Historical Diabetes Risk Score (last 10 records)
+def get_user_diabetes_risk_history(db: Session, user_id: int):
+    results = db.query(UserDiabetesPredictionHistory).filter(UserDiabetesPredictionHistory.user_id == user_id).order_by(UserDiabetesPredictionHistory.id.desc()).limit(10).all()
+    
+    if results:
+        return [{"date": result.timestamp, "risk_score": result.diabetes_risk} for result in results]
+    return []
+
+# Get Historical Heart Risk Score (last 10 records)
+def get_user_heart_risk_history(db: Session, user_id: int):
+    results = db.query(UserHeartPredictionHistory).filter(UserHeartPredictionHistory.user_id == user_id).order_by(UserHeartPredictionHistory.id.desc()).limit(10).all()
+    
+    if results:
+        return [{"date": result.timestamp, "risk_score": result.heart_risk} for result in results]
+    return []

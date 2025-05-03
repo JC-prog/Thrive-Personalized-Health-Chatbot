@@ -2,6 +2,8 @@ from pydantic import BaseModel, EmailStr,  conint, confloat, constr
 from typing import Optional, Dict
 from datetime import datetime
 from typing import Dict, Any
+from typing import List
+
 # User Registration Input
 class UserRegisterInput(BaseModel):
     username: str
@@ -131,12 +133,18 @@ class UserProfileClinicalMeasurementOut(BaseModel):
     class Config:
         orm_mode = True
 
-# Historical Risk Score Output
+# Model for a single risk score entry (for historical data)
+class RiskScoreHistoryEntry(BaseModel):
+    date: datetime
+    risk_score: float
+
+# Model for the overall user risk score response
 class UserRiskScore(BaseModel):
     id: int
     diabetes_risk: Optional[float]
     heart_risk: Optional[float]
+    diabetes_history: Optional[List[RiskScoreHistoryEntry]] = []  # Last 10 diabetes scores
+    heart_history: Optional[List[RiskScoreHistoryEntry]] = []  # Last 10 heart risk scores
 
     class Config:
         orm_mode = True
-

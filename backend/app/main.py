@@ -180,13 +180,24 @@ def get_user_risk_score(token: str = Depends(oauth2_scheme), db: Session = Depen
         raise HTTPException(status_code=401, detail="Invalid token")
     
     username = payload.get("sub")
-
     user = crud.get_user_profile_by_username(db, username)
 
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
     
+    # Fetch latest risk scores
     diabetes_score = crud.get_user_diabetes_risk(db, user.id)
     heart_score = crud.get_user_heart_risk(db, user.id)
     
-    return UserRiskScore(id=user.id, diabetes_risk=diabetes_score, heart_risk=heart_score)
+    # Fetch historical risk scores (last 10 entries)
+    diabetes_history = crud.get_user_diabetes_risk_history(db, user.id)
+    heart_history = crud.get_user_heart_risk_history(db, user.id)
+    
+    # Return both latest and historical data
+    return UserRiskScore(
+        id=user.id,
+        diabetes_risk=diabetes_score,
+        heart_risk=heart_score,
+        diabetes_history=diabetes_history,
+        heart_history=heart_history
+    )

@@ -1,6 +1,7 @@
 from sqlalchemy import Column, DateTime, Boolean, Integer, Float, String, ForeignKey
 from sqlalchemy.orm import relationship
 from .database import Base
+from datetime import datetime
 
 class User(Base):
     __tablename__ = "users"
@@ -84,6 +85,7 @@ class UserDiabetesPredictionHistory(Base):
     id = Column(Integer, primary_key = True, autoincrement=True)
     user_id = Column(Integer, nullable=False)
     diabetes_risk = Column(Float, nullable=False)
+    timestamp = Column(DateTime, default=datetime.utcnow)
 
 class UserHeartPredictionHistory(Base):
     __tablename__ = "user_heart_history"
@@ -91,3 +93,4 @@ class UserHeartPredictionHistory(Base):
     id = Column(Integer, primary_key = True, autoincrement=True)
     user_id = Column(Integer, nullable=False)
     heart_risk = Column(Float, nullable=False)
+    timestamp = Column(DateTime, default=datetime.utcnow)

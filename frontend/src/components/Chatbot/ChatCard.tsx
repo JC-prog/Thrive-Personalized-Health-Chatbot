@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { sendMessage } from "../../api/chat-api";
 import nlp from "compromise";
+import { CircularProgress } from '@mui/material';
 
 // Global variable to store questions
 let allQuestions: { question: string; intent: string }[] = [];
@@ -312,16 +313,21 @@ const ChatCard = () => {
             key={index}
             className={`flex ${message.type === "user" ? "justify-end" : "justify-start"}`}
           >
-            {typeof message.text === "string" ? (
-              <div dangerouslySetInnerHTML={{ __html: message.text }} />
-            ) : (
-              <pre className="whitespace-pre-wrap">{JSON.stringify(message.text, null, 2)}</pre>
-            )}
+            <div
+              className={`${
+                message.type === "user" ? "bg-indigo-600 text-white" : "bg-gray-200 text-gray-800"
+              } max-w-[70%] p-3 rounded-lg shadow-md`}
+            >
+              {typeof message.text === "string" ? (
+                <div dangerouslySetInnerHTML={{ __html: message.text }} />
+              ) : (
+                <pre className="whitespace-pre-wrap">{JSON.stringify(message.text, null, 2)}</pre>
+              )}
+            </div>
           </div>
         ))}
         <div ref={messagesEndRef} />
       </div>
-
 
       {/* Sample Prompts */}
       <div className="mt-4 space-y-2">
@@ -331,10 +337,10 @@ const ChatCard = () => {
             <button
               key={index}
               onClick={() => handlePromptClick(prompt)}
-              className={`px-4 py-2 bg-indigo-100 text-indigo-600 rounded-lg hover:bg-indigo-200 ${
+              className={`px-4 py-2 bg-indigo-100 text-indigo-600 rounded-lg hover:bg-indigo-200 transition duration-200 ${
                 loading ? "opacity-50 cursor-not-allowed" : ""
               }`}
-              disabled={loading} // Disable button while loading
+              disabled={loading}
             >
               {prompt}
             </button>
@@ -351,18 +357,18 @@ const ChatCard = () => {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Type your message..."
-            className="w-full p-3 bg-gray-100 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            disabled={loading} // Disable input while loading
-            ref={inputRef} // Attach ref to input field
+            className="w-full p-3 bg-gray-100 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200"
+            disabled={loading}
+            ref={inputRef}
           />
           <button
             onClick={handleSend}
             className={`px-4 py-3 ${
               loading ? "bg-gray-400 cursor-not-allowed" : "bg-indigo-600 hover:bg-indigo-700"
-            } text-white rounded-r-lg focus:outline-none focus:ring-2 focus:ring-indigo-500`}
-            disabled={loading} // Disable button while loading
+            } text-white rounded-r-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200`}
+            disabled={loading}
           >
-            {loading ? "Sending..." : "Send"}
+            {loading ? <CircularProgress size={24} className="text-white" /> : "Send"}
           </button>
         </div>
       </div>
