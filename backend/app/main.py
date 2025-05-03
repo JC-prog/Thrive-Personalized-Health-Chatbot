@@ -10,6 +10,7 @@ from app.chatbot.chatbot import generate_response
 from app.schemas import ChatRequest, ChatResponse, UserRiskScore
 from app.prediction_models.heart_prediction import HeartRiskPredictor
 from app.prediction_models.diabetes_prediction import DiabetesRiskPredictor
+from .user import UserWrapper
 
 app = FastAPI()
 
@@ -162,3 +163,10 @@ def get_user_risk_score(token: str = Depends(oauth2_scheme), db: Session = Depen
     heart_score = crud.get_user_heart_risk(db, user.id)
     
     return UserRiskScore(id=user.id, diabetes_risk=diabetes_score, heart_risk=heart_score)
+
+@app.get("/user")
+def getUser(db: Session = Depends(get_db)):
+
+    user = UserWrapper(db, "TestUser1")
+
+    print(user.age)
