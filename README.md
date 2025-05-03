@@ -23,6 +23,9 @@ docker-compose build --no-cache
 2. python -m venv venv-310
 3. .\venv\Scripts\activate  # This activates the Python environment
 4. pip install -r requirements.txt
+5. Create a .env file the the root directory /backend
+6. Add your OpenAI API key like this 
+	OPENAI_API_KEY=your-api-key-here
 
 ### Database 
 Install and setup MySQL:

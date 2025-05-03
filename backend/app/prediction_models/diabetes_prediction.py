@@ -51,22 +51,79 @@ class DiabetesRiskPredictor:
         return pd.DataFrame([data])
 
     def predict(self, user_id: int):
-        general, clinical, lifestyle, history, score = self.get_user_data(user_id)
-        df = self.preprocess(general, clinical, lifestyle, history, score)
+        try:
+            # Fetch user data
+            general, clinical, lifestyle, history, score = self.get_user_data(user_id)
+            if not all([general, clinical, lifestyle, history, score]):
+                raise ValueError("Incomplete user data. Please ensure all required fields are filled.")
 
-        predicted_risk = self.model.predict_proba(df)[0][1]
+            # Preprocess the data
+            df = self.preprocess(general, clinical, lifestyle, history, score)
 
-        db_history = UserDiabetesPredictionHistory(
-            user_id = user_id,
-            diabetes_risk = predicted_risk
-        )
+            # Perform the prediction
+            predicted_risk = self.model.predict_proba(df)[0][1]
 
-        self.db.add(db_history)
-        self.db.commit()
-        self.db.refresh(db_history)
+            # Save the prediction to the database
+            db_history = UserDiabetesPredictionHistory(
+                user_id=user_id,
+                diabetes_risk=predicted_risk
+            )
+            self.db.add(db_history)
+            self.db.commit()
+            self.db.refresh(db_history)
 
-        return predicted_risk
+            return predicted_risk
 
+        except ValueError as ve:
+            print(f"ValueError: {ve}")
+            return {"error": str(ve)}
+
+        except AttributeError as ae:
+            print(f"AttributeError: {ae}")
+            return {"error": "Invalid or missing user data attributes. Please check the input data."}
+
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")
+            return {"error": "An unexpected error occurred during prediction. Please try again later."}
+    def predict_with_details(self, user_id: int):
+        """
+        Predict the diabetes risk and return both the predicted risk and the preprocessed dataframe.
+        """
+        try:
+            # Fetch user data
+            general, clinical, lifestyle, history, score = self.get_user_data(user_id)
+            if not all([general, clinical, lifestyle, history, score]):
+                raise ValueError("Incomplete user data. Please ensure all required fields are filled.")
+
+            # Preprocess the data
+            df = self.preprocess(general, clinical, lifestyle, history, score)
+
+            # Perform the prediction
+            predicted_risk = self.model.predict_proba(df)[0][1]
+
+            # Save the prediction to the database
+            db_history = UserDiabetesPredictionHistory(
+                user_id=user_id,
+                diabetes_risk=predicted_risk
+            )
+            self.db.add(db_history)
+            self.db.commit()
+            self.db.refresh(db_history)
+
+            # Return both the predicted risk and the preprocessed dataframe
+            return predicted_risk, df
+
+        except ValueError as ve:
+            print(f"ValueError: {ve}")
+            return {"error": str(ve)}, None
+
+        except AttributeError as ae:
+            print(f"AttributeError: {ae}")
+            return {"error": "Invalid or missing user data attributes. Please check the input data."}, None
+
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")
+            return {"error": "An unexpected error occurred during prediction. Please try again later."}, None
     @staticmethod
     def cholesterol_category(cholesterol):
         if cholesterol > 239:
