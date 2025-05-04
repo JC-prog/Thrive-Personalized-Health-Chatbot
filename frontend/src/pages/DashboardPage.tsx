@@ -7,6 +7,7 @@ import { getProfile, getRiskScores } from "../api/profile-api";
 import { format, formatDistanceToNow } from "date-fns";
 import { CalendarCheck2, Info, RefreshCcw } from "lucide-react";
 import { Syringe } from "lucide-react";
+import { Lightbulb, MessageCircle } from "lucide-react";
 
 const Card = ({
   title,
@@ -144,6 +145,28 @@ const DashboardContent = () => {
         )}
       </div>
   
+      {/* Call to Action */}
+      <div className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition mb-10 flex items-start gap-4">
+        <div className="bg-indigo-100 p-3 rounded-full">
+          <CalendarCheck2 className="text-indigo-600" size={28} />
+        </div>
+        <div className="flex-1">
+          <p className="text-slate-700 text-lg mb-2">
+            Last assessment completed on <span className="font-semibold">{formattedDate}</span> ({timeAgo}).
+          </p>
+          <p className="text-slate-600 mb-4 flex items-center gap-2">
+            <Info size={18} className="text-slate-500" />
+            Keeping your assessment up to date helps us provide the most accurate health insights for you.
+          </p>
+          <a href="/assessment">
+            <button className="px-6 py-3 bg-indigo-600 text-white rounded-full text-lg font-semibold flex items-center gap-2 hover:bg-indigo-700 transition cursor-pointer">
+              <RefreshCcw size={20} />
+              Update Assessment
+            </button>
+          </a>
+        </div>
+      </div>
+
       {/* Risk Scores */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
         {/* Heart Disease Risk */}
@@ -177,31 +200,55 @@ const DashboardContent = () => {
         </div>
       </div>
 
-  
-      {/* Call to Action */}
-      <div className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition mb-10 flex items-start gap-4">
-        <div className="bg-indigo-100 p-3 rounded-full">
-          <CalendarCheck2 className="text-indigo-600" size={28} />
+    {/* Insights Section */}
+      <div className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition mb-10 flex flex-col gap-4">
+        <div className="flex items-center gap-3 mb-2">
+          <Lightbulb className="text-yellow-500" size={24} />
+          <h3 className="text-lg font-semibold text-gray-700">Insights</h3>
         </div>
-        <div className="flex-1">
-          <p className="text-slate-700 text-lg mb-2">
-            Last assessment completed on <span className="font-semibold">{formattedDate}</span> ({timeAgo}).
-          </p>
-          <p className="text-slate-600 mb-4 flex items-center gap-2">
-            <Info size={18} className="text-slate-500" />
-            Keeping your assessment up to date helps us provide the most accurate health insights for you.
-          </p>
-          <a href="/assessment">
-            <button className="px-6 py-3 bg-indigo-600 text-white rounded-full text-lg font-semibold flex items-center gap-2 hover:bg-indigo-700 transition cursor-pointer">
-              <RefreshCcw size={20} />
-              Update Assessment
-            </button>
-          </a>
-        </div>
+        
+        {/* Heart Disease Insight */}
+        {riskScores?.heart_risk != null && (
+          <div className="text-gray-600">
+            {riskScores.heart_risk >= 0.5 ? (
+              <p>
+                <span className="font-semibold text-red-500">High heart disease risk</span>. We recommend scheduling a cardiovascular health screening and adopting a heart-friendly diet and lifestyle.
+              </p>
+            ) : (
+              <p>
+                <span className="font-semibold text-green-600">Heart disease risk is within a healthy range</span>. Keep maintaining a balanced lifestyle!
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* Diabetes Insight */}
+        {riskScores?.diabetes_risk != null && (
+          <div className="text-gray-600">
+            {riskScores.diabetes_risk >= 0.5 ? (
+              <p>
+                <span className="font-semibold text-blue-500">High diabetes risk</span>. Consider reducing sugar intake, staying active, and speaking with a healthcare professional.
+              </p>
+            ) : (
+              <p>
+                <span className="font-semibold text-green-600">Diabetes risk is within a healthy range</span>. Great job—keep it up!
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* Chatbot CTA with Message Icon */}
+        <button
+          onClick={() => window.location.href = "/chat"}
+          className="mt-6 self-start flex items-center gap-3 px-5 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-lg hover:from-indigo-600 hover:to-purple-700 transition cursor-pointer"
+        >
+          <MessageCircle className="text-white" size={20} />
+          <span className="text-lg font-semibold">Talk to our virtual health assistant! 💬</span>
+        </button>
       </div>
 
-
-
+  
+    
       {/* Chart Section */}
       <div className="bg-white p-6 rounded-2xl shadow-sm overflow-auto">
         <h2 className="text-xl font-semibold text-gray-800 mb-4">Risk History</h2>
