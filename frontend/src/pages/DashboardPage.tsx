@@ -67,12 +67,12 @@ const DashboardContent = () => {
   // Scale the data by multiplying by 100
   const scaledDiabetesHistory = riskScores?.diabetes_history.map(item => ({
     ...item,
-    risk_score: item.risk_score * 100,  // Multiply each risk score by 100
+    risk_score: item.risk_score,  // Multiply each risk score by 100
   }));
 
   const scaledHeartHistory = riskScores?.heart_history.map(item => ({
     ...item,
-    risk_score: item.risk_score * 100,  // Multiply each risk score by 100
+    risk_score: item.risk_score,  // Multiply each risk score by 100
   }));
 
   useEffect(() => {

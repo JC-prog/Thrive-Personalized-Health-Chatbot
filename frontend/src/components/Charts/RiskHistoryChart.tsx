@@ -24,7 +24,9 @@ const RiskHistoryChart = ({ diabetesHistory, heartHistory }: RiskHistoryChartPro
                 dataKey="date" 
                 tickFormatter={(dateStr) => format(parseISO(dateStr), 'MMM d')} 
               />
-              <YAxis />
+              <YAxis 
+                tickFormatter={(value) => `${(value * 100).toFixed(2)}%`} // Format Y-axis ticks as percentage
+              />
               <Tooltip />
               <Legend />
               <Line type="monotone" dataKey="risk_score" stroke="#8884d8" />
@@ -45,7 +47,9 @@ const RiskHistoryChart = ({ diabetesHistory, heartHistory }: RiskHistoryChartPro
                 dataKey="date" 
                 tickFormatter={(dateStr) => format(parseISO(dateStr), 'MMM d')} 
               />
-              <YAxis />
+              <YAxis 
+                tickFormatter={(value) => `${(value * 100).toFixed(2)}%`} // Format Y-axis ticks as percentage
+              />
               <Tooltip />
               <Legend />
               <Line type="monotone" dataKey="risk_score" stroke="#82ca9d" />
