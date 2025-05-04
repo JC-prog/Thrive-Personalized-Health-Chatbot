@@ -24,10 +24,18 @@ const RiskHistoryChart = ({ diabetesHistory, heartHistory }: RiskHistoryChartPro
                 dataKey="date" 
                 tickFormatter={(dateStr) => format(parseISO(dateStr), 'MMM d')} 
               />
-              <YAxis 
-                tickFormatter={(value) => `${(value * 100).toFixed(2)}%`} // Format Y-axis ticks as percentage
+              <YAxis
+                domain={[0, 1.01]} // slight overshoot ensures 1 is fully rendered
+                tickFormatter={(value) => `${(value).toFixed(1)}%`}
+                ticks={[0, 0.5, 1]} // still enforce ticks at 0%, 50%, 100%
               />
-              <Tooltip />
+
+              <Tooltip
+                formatter={(value: number) => `${(value).toFixed(2)}%`}
+                labelFormatter={(label: string) => format(parseISO(label), 'PPpp')} // e.g., "May 4, 2025 at 12:00 PM"
+              />
+
+
               <Legend />
               <Line type="monotone" dataKey="risk_score" stroke="#8884d8" />
             </LineChart>
@@ -48,9 +56,14 @@ const RiskHistoryChart = ({ diabetesHistory, heartHistory }: RiskHistoryChartPro
                 tickFormatter={(dateStr) => format(parseISO(dateStr), 'MMM d')} 
               />
               <YAxis 
-                tickFormatter={(value) => `${(value * 100).toFixed(2)}%`} // Format Y-axis ticks as percentage
+                tickFormatter={(value) => `${(value).toFixed(1)}%`} // Format Y-axis ticks as percentage
               />
-              <Tooltip />
+              <Tooltip
+                formatter={(value: number) => `${(value).toFixed(2)}%`}
+                labelFormatter={(label: string) => format(parseISO(label), 'PPpp')} // e.g., "May 4, 2025 at 12:00 PM"
+              />
+
+
               <Legend />
               <Line type="monotone" dataKey="risk_score" stroke="#82ca9d" />
             </LineChart>
