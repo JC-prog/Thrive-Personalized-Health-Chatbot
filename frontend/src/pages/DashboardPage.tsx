@@ -203,13 +203,15 @@ const DashboardContent = () => {
 
 
       {/* Chart Section */}
-      <div className="bg-white p-6 rounded-2xl shadow-sm">
+      <div className="bg-white p-6 rounded-2xl shadow-sm overflow-auto">
         <h2 className="text-xl font-semibold text-gray-800 mb-4">Risk History</h2>
         {riskScores ? (
-          <RiskHistoryChart
-            diabetesHistory={scaledDiabetesHistory || []}
-            heartHistory={scaledHeartHistory || []}
-          />
+          <div className="w-full h-full">
+            <RiskHistoryChart
+              diabetesHistory={scaledDiabetesHistory || []}
+              heartHistory={scaledHeartHistory || []}
+            />
+          </div>
         ) : (
           <p className="text-gray-500">Loading risk history...</p>
         )}
