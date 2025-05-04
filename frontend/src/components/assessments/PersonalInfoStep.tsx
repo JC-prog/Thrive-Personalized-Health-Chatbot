@@ -1,5 +1,6 @@
 import React from 'react';
 import { UserProfileUpdateData } from "src/types/user";
+import { motion } from "framer-motion";
 
 type Props = {
   next: () => void;
@@ -9,15 +10,33 @@ type Props = {
 };
 
 const PersonalInfoStep = ({ next, prev, data, update }: Props) => (
-  <div className="text-center max-w-3xl mx-auto px-4 py-6">
-    <h2 className="text-2xl md:text-4xl font-bold text-gray-800 mb-6 bg-gradient-to-r from-indigo-600 to-blue-500 bg-clip-text text-transparent">
+  <motion.div
+    className="max-w-3xl mx-auto px-4 py-8"
+    initial={{ opacity: 0, x: 50 }}
+    animate={{ opacity: 1, x: 0 }}
+    exit={{ opacity: 0, x: -50 }}
+    transition={{ duration: 0.3 }}
+  >
+    {/* Step indicator */}
+    <div className="flex justify-between items-center mb-6">
+      {["Personal Info", "Lifestyle","History" ,"Metrics", "Scores", "Summary"].map((step, idx) => (
+        <div key={idx} className="flex-1 text-center">
+          <div className={`h-1 rounded-full ${idx === 0 ? 'bg-indigo-600' : 'bg-gray-300'}`} />
+          <p className={`mt-1 text-sm ${idx === 0 ? 'text-indigo-600 font-semibold' : 'text-gray-400'}`}>{step}</p>
+        </div>
+      ))}
+    </div>
+
+    {/* Title */}
+    <h2 className="text-3xl font-bold text-center text-transparent bg-gradient-to-r from-indigo-600 to-blue-500 bg-clip-text mb-6">
       Personal Information
     </h2>
 
-    <div className="space-y-6 mb-10 text-left">
+    {/* Form card */}
+    <div className="bg-white rounded-2xl shadow-lg p-6 space-y-6">
       {/* Age */}
       <div>
-        <label className="block mb-2 text-gray-700 font-medium">Age</label>
+        <label className="block mb-1 text-gray-700 font-medium">Age</label>
         <input
           type="number"
           value={data.age}
@@ -30,7 +49,7 @@ const PersonalInfoStep = ({ next, prev, data, update }: Props) => (
 
       {/* Gender */}
       <div>
-        <label className="block mb-2 text-gray-700 font-medium">Gender</label>
+        <label className="block mb-1 text-gray-700 font-medium">Gender</label>
         <select
           value={data.gender}
           onChange={(e) => update({ gender: parseInt(e.target.value) })}
@@ -43,13 +62,12 @@ const PersonalInfoStep = ({ next, prev, data, update }: Props) => (
 
       {/* Education */}
       <div>
-        <label className="block mb-2 text-gray-700 font-medium">Education</label>
+        <label className="block mb-1 text-gray-700 font-medium">Education</label>
         <select
           value={data.education}
           onChange={(e) => update({ education: parseInt(e.target.value) })}
           className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none shadow-sm"
         >
-          <option value="0">Select Education</option>
           <option value="1">Never attended school</option>
           <option value="2">Primary School</option>
           <option value="3">Secondary School</option>
@@ -62,14 +80,22 @@ const PersonalInfoStep = ({ next, prev, data, update }: Props) => (
       {/* Insurance */}
       <div>
         <label className="block mb-2 text-gray-700 font-medium">Do you have insurance?</label>
-        <select
-          value={data.healthcare}
-          onChange={(e) => update({ healthcare: parseInt(e.target.value) })}
-          className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none shadow-sm"
-        >
-          <option value="0">No</option>
-          <option value="1">Yes</option>
-        </select>
+        <div className="flex gap-4">
+          {[{ label: "Yes", value: 1 }, { label: "No", value: 0 }].map((option) => (
+            <button
+              key={option.value}
+              className={`flex-1 py-2 rounded-xl border ${
+                data.healthcare === option.value
+                  ? 'bg-indigo-600 text-white'
+                  : 'bg-gray-100 text-gray-700 border-gray-300'
+              } hover:shadow-md transition cursor-pointer`}
+              onClick={() => update({ healthcare: option.value })}
+              type="button"
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Income */}
@@ -78,11 +104,11 @@ const PersonalInfoStep = ({ next, prev, data, update }: Props) => (
         <div className="space-y-2">
           {[
             "Less than $10,000",
-            "Less than $15,000 ($10,000 to less than $15,000)",
-            "Less than $20,000 ($15,000 to less than $20,000)",
-            "Less than $25,000 ($20,000 to less than $25,000)",
-            "Less than $50,000 ($35,000 to less than $50,000)",
-            "Less than $75,000 ($50,000 to less than $75,000)",
+            "$10,000 to less than $15,000",
+            "$15,000 to less than $20,000",
+            "$20,000 to less than $25,000",
+            "$35,000 to less than $50,000",
+            "$50,000 to less than $75,000",
             "$75,000 or more",
           ].map((label, idx) => (
             <label key={idx} className="flex items-center space-x-3">
@@ -101,22 +127,23 @@ const PersonalInfoStep = ({ next, prev, data, update }: Props) => (
       </div>
     </div>
 
-    <div className="flex justify-between">
+    {/* Navigation buttons */}
+    <div className="flex justify-between mt-8">
       <button
-        className="px-6 py-3 bg-gray-300 text-gray-800 font-medium rounded-xl hover:bg-gray-400 transition-all"
+        className="px-6 py-3 bg-gray-300 text-gray-800 font-medium rounded-xl hover:bg-gray-400 transition cursor-pointer"
         onClick={prev}
       >
         Back
       </button>
 
       <button
-        className="px-8 py-4 bg-indigo-600 text-white font-medium rounded-xl shadow-md hover:bg-indigo-700 transition-all"
+        className="px-8 py-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 shadow-md transition cursor-pointer"
         onClick={next}
       >
         Next
       </button>
     </div>
-  </div>
+  </motion.div>
 );
 
 export default PersonalInfoStep;

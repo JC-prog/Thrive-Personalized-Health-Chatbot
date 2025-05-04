@@ -42,7 +42,7 @@ const WelcomeStep = ({ next }: { next: () => void }) => (
     </div>
 
     <button 
-      className="w-full sm:w-auto px-8 py-4 bg-indigo-600 text-white font-medium rounded-xl shadow-md hover:bg-indigo-700 transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+      className="w-full sm:w-auto px-8 py-4 bg-indigo-600 text-white font-medium rounded-xl shadow-md hover:bg-indigo-700 transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 cursor-pointer"
       onClick={next} 
     >
       Start Assessment
