@@ -59,22 +59,21 @@ const RiskHistoryChart = ({ diabetesHistory, heartHistory }: RiskHistoryChartPro
               <h3 className="text-lg font-semibold text-slate-800">Diabetes Risk History</h3>
             </div>
             <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={heartHistory}>
+              <LineChart data={diabetesHistory}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis
                   dataKey="date"
                   tickFormatter={(dateStr) => format(parseISO(dateStr), 'MMM d')}
                 >
-                  {/* Adjusted Label positioning */}
                   <Label value="Risk Percentage" offset={10} position="bottom" />
                 </XAxis>
                 <YAxis tickFormatter={(value) => `${(value).toFixed(1)}%`} />
                 <Tooltip content={<CustomTooltip />} />
-                <Line type="monotone" dataKey="risk_score" stroke="#8884d8" />
+                <Line type="monotone" dataKey="risk_score" stroke="#82ca9d" />
               </LineChart>
             </ResponsiveContainer>
-
           </div>
+
         </div>
 
         {/* Horizontal Legend */}
