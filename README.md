@@ -1,6 +1,6 @@
-# Section 1: Project Title
+## Section 1: Project Title
 
-# Thrive: Diabetes & Heart Diagnosis and Recommendation System
+## Thrive: Diabetes & Heart Diagnosis and Recommendation System
 
 ## Section 2: Executive Summary
 
