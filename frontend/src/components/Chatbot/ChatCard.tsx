@@ -21,6 +21,26 @@ let allQuestions: { question: string; intent: string }[] = [];
 
 //   return response.json(); // Return JSON response
 // };
+import nlp from "compromise";
+
+// Global variable to store questions
+let allQuestions: { question: string; intent: string }[] = [];
+
+// export const sendMessage = async (message: string) => {
+//   const response = await fetch("../../api/chat-api", {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify({ message }),
+//   });
+
+//   if (!response.ok) {
+//     throw new Error("Failed to fetch response from the server.");
+//   }
+
+//   return response.json(); // Return JSON response
+// };
 
 const ChatCard = () => {
   const [messages, setMessages] = useState<{ text: string; type: "user" | "bot" }[]>([
@@ -50,14 +70,6 @@ const ChatCard = () => {
       console.error("Failed to load questions:", error);
     }
   };
-    // Set initial pre-prompts when the component loads
-    useEffect(() => {
-      setDynamicPrompts([
-        "What are the symptoms of heart disease?",
-        "How can I reduce my diabetes risk?",
-        "What are some healthy exercise tips?",
-      ]);
-    }, []);
   const handleSend = async () => {
     if (!input.trim() || loading) return; // Prevent empty messages or multiple submissions
 
@@ -80,7 +92,7 @@ const ChatCard = () => {
     } finally {
       setLoading(false); // Reset loading state
       ensureInputFocus(); // Ensure input field is focused after sending
-      updateDynamicPrompts(); // Update prompts based on the latest chat history
+      // updateDynamicPrompts(); // Update prompts based on the latest chat history
     }
   };
 
@@ -102,7 +114,14 @@ const ChatCard = () => {
   useEffect(() => {
     loadQuestions();
   }, []);
-
+ // Set initial pre-prompts when the component loads
+ useEffect(() => {
+  setDynamicPrompts([
+    "Heart Risk Assessment",
+    "Diabetes Risk Assessment",
+    "Exercise Recommendations",
+  ]);
+}, []);
   // Extract the most important noun and verb from the latest user message
   const extractKeywords = (text: string) => {
     const doc = nlp(text);
@@ -134,9 +153,9 @@ const ChatCard = () => {
 
     if (!lastUserMessage) {
       setDynamicPrompts([
-        "What are the symptoms of heart disease?",
-        "How can I reduce my diabetes risk?",
-        "What are some healthy exercise tips?",
+        "Heart Risk Assessment",
+        "Diabetes Risk Assessment",
+        "Exercise Recommendations",
       ]);
       return;
     }
@@ -147,9 +166,9 @@ const ChatCard = () => {
     
       if (!lastUserMessage || allQuestions.length === 0) {
         setDynamicPrompts([
-          "What are the symptoms of heart disease?",
-          "How can I reduce my diabetes risk?",
-          "What are some healthy exercise tips?",
+          "Heart Risk Assessment",
+          "Diabetes Risk Assessment",
+          "Exercise Recommendations",
         ]);
         return;
       }
@@ -188,9 +207,9 @@ const ChatCard = () => {
     
       // // Combine the selected questions
       // const prompts = [...selectedQuestions, ...randomQuestions.map((q) => q.question)].slice(0, 3);
-      const prompts = relatedQuestions.map((q) => q.question).slice(0, 3); // Select up to 3 related questions
+      // const prompts = relatedQuestions.map((q) => q.question).slice(0, 3); // Select up to 3 related questions
       // Update the dynamic prompts
-      setDynamicPrompts(prompts);
+      // setDynamicPrompts(prompts);
     };
 
     const { noun, verb, nouns, verbs } = extractKeywords(lastUserMessage);
@@ -229,7 +248,7 @@ const ChatCard = () => {
       prompts.push(`What are the best ways to ${verb}?`);
       prompts.push(`Why should I ${verb}?`);
     } else {
-      prompts.push(`Can you provide more details?`);
+      prompts.push(`Can you provide more details? ${verb} || ${noun}`);
       prompts.push("What should I know about this?");
       prompts.push("How can I learn more?");
     }
@@ -314,9 +333,9 @@ const ChatCard = () => {
             className={`flex ${message.type === "user" ? "justify-end" : "justify-start"}`}
           >
             <div
-              className={`${
-                message.type === "user" ? "bg-indigo-600 text-white" : "bg-gray-200 text-gray-800"
-              } max-w-[70%] p-3 rounded-lg shadow-md`}
+              className={`max-w-ws p-3 rounded-lg text-white ${
+                message.type === "user" ? "bg-indigo-600 text-right" : "bg-gray-700 text-left"
+              }`}
             >
               {typeof message.text === "string" ? (
                 <div dangerouslySetInnerHTML={{ __html: message.text }} />
@@ -337,10 +356,10 @@ const ChatCard = () => {
             <button
               key={index}
               onClick={() => handlePromptClick(prompt)}
-              className={`px-4 py-2 bg-indigo-100 text-indigo-600 rounded-lg hover:bg-indigo-200 transition duration-200 ${
+              className={`px-4 py-2 bg-indigo-100 text-indigo-600 rounded-lg hover:bg-indigo-200 ${
                 loading ? "opacity-50 cursor-not-allowed" : ""
               }`}
-              disabled={loading}
+              disabled={loading} // Disable button while loading
             >
               {prompt}
             </button>
@@ -357,16 +376,16 @@ const ChatCard = () => {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Type your message..."
-            className="w-full p-3 bg-gray-100 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200"
-            disabled={loading}
-            ref={inputRef}
+            className="w-full p-3 bg-gray-100 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            disabled={loading} // Disable input while loading
+            ref={inputRef} // Attach ref to input field
           />
           <button
             onClick={handleSend}
             className={`px-4 py-3 ${
               loading ? "bg-gray-400 cursor-not-allowed" : "bg-indigo-600 hover:bg-indigo-700"
-            } text-white rounded-r-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200`}
-            disabled={loading}
+            } text-white rounded-r-lg focus:outline-none focus:ring-2 focus:ring-indigo-500`}
+            disabled={loading} // Disable button while loading
           >
             {loading ? <CircularProgress size={24} className="text-white" /> : "Send"}
           </button>

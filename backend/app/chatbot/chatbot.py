@@ -6,6 +6,10 @@ from .models.distilbert import get_embedding
 from .models.utils import cosine_similarity
 from app.prediction_models.diabetes_prediction import DiabetesRiskPredictor
 from app.prediction_models.heart_prediction import HeartRiskPredictor
+# from app.chatbot.exercise_recommendation_v4_7 import get_exercise_plan_summary,generate_exercise_plan
+from app.chatbot.updated_exercise_recommendation_v4_7 import create_guidelines_graph,get_exercise_plan_summary
+from app.models import UserGeneralData, UserClinicalMeasurement, UserLifeStyleInformation, UserMedicalHistory, UserHealthScore, UserDiabetesPredictionHistory
+
 import numpy as np
 from ast import literal_eval
 from scipy.spatial.distance import cosine
@@ -31,12 +35,89 @@ def is_greeting(user_input):
 
 def get_greeting_response():
     return random.choice(GREETINGS_RESPONSES)
+def initialize_user_profile(age=None, gender=None, height=None, weight=None,
+                            bp_systolic=None, bp_diastolic=None, glucose=None,
+                            cholesterol=None, fitness_level=None, fitness_goal=None,
+                            sessions_per_week=None, equipment=None):
+        """Initialize or collect user profile with defaults
 
+        Args:
+            age: User's age (default: 40)
+            gender: User's gender (default: "not specified")
+            height: User's height in cm (default: 170.0)
+            weight: User's weight in kg (default: 70.0)
+            bp_systolic: Systolic blood pressure (default: 120)
+            bp_diastolic: Diastolic blood pressure (default: 80)
+            glucose: Blood glucose level (default: 100)
+            cholesterol: Blood cholesterol level (default: 180)
+            fitness_level: User's fitness level (default: "beginner")
+            fitness_goal: User's fitness goal (default: "general")
+            sessions_per_week: Number of weekly workout sessions (default: 3)
+            equipment: Available equipment (default: ["Bodyweight"])
+
+        Returns:
+            Dict: Complete user profile with derived metrics
+        """
+        # Initialize with provided values or defaults
+        profile = {
+            "demographics": {
+                "age": age if age is not None else 40,
+                "gender": gender.lower() if gender is not None else "not specified"
+            },
+            "body_metrics": {
+                "height": height if height is not None else 170.0,  # cm
+                "weight": weight if weight is not None else 70.0    # kg
+            },
+            "health_metrics": {
+                "bp_systolic": bp_systolic if bp_systolic is not None else 120,
+                "bp_diastolic": bp_diastolic if bp_diastolic is not None else 80,
+                "glucose": glucose if glucose is not None else 100,
+                "cholesterol": cholesterol if cholesterol is not None else 180
+            },
+            "fitness_info": {
+                "fitness_level": fitness_level.lower() if fitness_level is not None else "beginner",
+                "fitness_goal": fitness_goal.lower() if fitness_goal is not None else "general",
+            },
+            "preferences": {
+                "sessions_per_week": sessions_per_week if sessions_per_week is not None else 3,
+                "equipment": equipment if equipment is not None else ["Bodyweight"]
+            }
+        }
+
+        # Calculate BMI
+        height_m = profile["body_metrics"]["height"] / 100  # convert cm to m
+        profile["body_metrics"]["bmi"] = round(profile["body_metrics"]["weight"] / (height_m * height_m), 1)
+
+        # Determine health condition flags
+        profile["health_conditions"] = {
+            "has_hypertension": (profile["health_metrics"]["bp_systolic"] >= 130 or
+                            profile["health_metrics"]["bp_diastolic"] >= 85),
+            "has_diabetes": profile["health_metrics"]["glucose"] >= 126,  # Fasting glucose ≥126 mg/dL
+            "has_high_cholesterol": profile["health_metrics"]["cholesterol"] >= 200,
+            "has_obesity": profile["body_metrics"]["bmi"] >= 30 if profile["body_metrics"]["bmi"] else False
+        }
+
+        # Calculate age-related max heart rate
+        profile["exercise_parameters"] = {
+            "max_heart_rate": 220 - profile["demographics"]["age"] if profile["demographics"]["age"] else 180,
+            "target_heart_rate_zone": {}
+        }
+
+        # Calculate target heart rate zones
+        max_hr = profile["exercise_parameters"]["max_heart_rate"]
+        profile["exercise_parameters"]["target_heart_rate_zone"] = {
+            "low_intensity": [int(max_hr * 0.5), int(max_hr * 0.6)],
+            "moderate_intensity": [int(max_hr * 0.6), int(max_hr * 0.7)],
+            "high_intensity": [int(max_hr * 0.7), int(max_hr * 0.85)]
+        }
+
+        return profile
 async def generate_response_openai_async(user_id: int, user_input: str, db, diabetes_model, heart_model) -> str:
     user_input = user_input.lower().strip()
     current_dir = os.path.dirname(os.path.abspath(__file__)) 
     csv_path = os.path.join(current_dir, 'data', 'cardio_and_diabetes_qa_embeddings.csv')
     csv_path_exercise = os.path.join(current_dir, 'data', 'combined_exercise_embeddings.csv')
+    csv_path_exercise_dataset = os.path.join(current_dir, 'data', 'combined_exercise_dataset.csv')
     combined_prompt = ""
 
     # Handle diabetes self-assessment
@@ -68,16 +149,90 @@ async def generate_response_openai_async(user_id: int, user_input: str, db, diab
             heart_prompt = form_heart_disease_prompt(heart_user_info)
             combined_prompt += f"""{heart_prompt}\n\nUser Heart Disease Risk Score is: {heart_risk_score * 100:.2f}%. 
             Add relevant emojis in the response where suitable. Include helpful lifestyle recommendation in your answer.\n"""
-    # elif is_exercise_question(user_input):
-    #     combined_prompt += "🏋️‍♂️ You are a helpful and friendly medical assistant 🤖. Use the UserInformation and context below to answer the user's question clearly and accurately with a positive tone. \n"
-    #     combined_prompt += "Use the context to provide a personalized response.\n"
-    #     combined_prompt += "Add relevant emojis in the response where suitable. Include helpful lifestyle recommendation in your answer.\n"
-    # elif is_healthy_habits_question(user_input):
-    #     combined_prompt += "🏋️‍♂️ You are a helpful and friendly medical assistant 🤖. Use the UserInformation and context below to answer the user's question clearly and accurately with a positive tone. \n"
-    #     combined_prompt += "Use the context to provide a personalized response.\n"
-    #     combined_prompt += "Add relevant emojis in the response where suitable. Include helpful lifestyle recommendation in your answer.\n"
+    elif is_analyze_user_total_health(user_input):
+            heart_predictor = HeartRiskPredictor(db, heart_model)
+            heart_risk_score, heart_user_info = heart_predictor.predict_with_details(user_id)
+
+            # Handle missing user info
+            if heart_user_info is None:
+                print("⚠️ Warning: Unable to retrieve user information for heart disease prediction.")
+                combined_prompt += "⚠️ Unable to process your heart disease self-assessment due to incomplete or invalid data. Please ensure your profile is complete.\n"
+            else:
+                # Form the prompt with user info
+                heart_prompt = form_heart_disease_prompt(heart_user_info)
+                combined_prompt += f"""{heart_prompt}\n\nUser Heart Disease Risk Score is: {heart_risk_score * 100:.2f}%. 
+                Add relevant emojis in the response where suitable. Include helpful lifestyle recommendation in your answer.\n"""
+            diabetes_predictor = DiabetesRiskPredictor(db, diabetes_model)
+            diabetes_risk_score, diabetes_user_info = diabetes_predictor.predict_with_details(user_id)
+
+            # Handle missing user info
+            if diabetes_user_info is None:
+                print("⚠️ Warning: Unable to retrieve user information for diabetes prediction.")
+                combined_prompt += "⚠️ Unable to process your diabetes self-assessment due to incomplete or invalid data. Please ensure your profile is complete.\n"
+            else:
+                # Form the prompt with user info
+                diabetes_prompt = form_user_info_prompt(diabetes_user_info)
+                combined_prompt += f"""{diabetes_prompt}\n\nUser Diabetes Risk Score is: {diabetes_risk_score * 100:.2f}%.\n
+                Add relevant emojis in the response where suitable. Include helpful lifestyle recommendation in your answer.\n"""    
+    elif is_exercise_question(user_input):
+        print("Exercise Intent")
+        # This will return the exercise plan based on the user profile
+        # user_profile = {
+        #     "demographics": {"age": 30, "gender": "male"},
+        #     "body_metrics": {"height": 180, "weight": 80},
+        #     "health_metrics": {"bp_systolic": 120, "bp_diastolic": 80, "glucose": 100, "cholesterol": 190},
+        #     "fitness_info": {"fitness_level": "beginner", "fitness_goal": "weight loss"},
+        #     "preferences": {"sessions_per_week": 3, "equipment": ["Bodyweight"]},
+        #     "health_conditions": {"has_hypertension": False, "has_diabetes": False, "has_high_cholesterol": False, "has_obesity": False}
+        # }
+        general = db.query(UserGeneralData).filter_by(id=user_id).first()
+        clinical = db.query(UserClinicalMeasurement).filter_by(id=user_id).first()
+        lifestyle = db.query(UserLifeStyleInformation).filter_by(id=user_id).first()
+        # history = db.query(UserMedicalHistory).filter_by(id=user_id).first()
+        # score = db.query(UserHealthScore).filter_by(id=user_id).first()
+        USER_PROFILE = initialize_user_profile(
+            age=general.age,
+            gender=general.gender,
+            height=clinical.height,
+            weight=clinical.weight,
+            bp_systolic=clinical.systolic_bp,
+            bp_diastolic=clinical.diastolic_bp,
+            glucose=clinical.glucose_level,
+            cholesterol=clinical.cholesterol_total,
+            fitness_level="intermediate" if lifestyle.active_lifestyle == 1 else "beginner",  # Map 1 to "Intermediate" and 0 to "Beginner"
+            fitness_goal="weight loss",
+            sessions_per_week=3,
+            equipment=["Bodyweight"]
+            
+        )
+        exercise_dataset_path = csv_path_exercise_dataset# "path/to/combined_exercise_dataset.csv"
+
+        # plan = generate_exercise_plan(USER_PROFILE, exercise_dataset_path)
+        # exercise_plan_result = get_exercise_plan_summary(plan)
+
+        # graph = create_guidelines_graph(plan, exercise_dataset_path)
+        exercise_plan_result = get_exercise_plan_summary(USER_PROFILE)
+
+        try:
+            parsed = json.loads(exercise_plan_result)
+            answer = parsed.get("answer", "")        
+        except Exception as e:
+            answer = exercise_plan_result     
+        return {"answer": answer}
+        
+        
+        combined_prompt += "🏋️‍♂️ You are a helpful and friendly medical assistant 🤖. Use the UserInformation and context below to answer the user's question clearly and accurately with a positive tone. \n"
+        combined_prompt += "Use the context to provide a personalized response.\n"
+        combined_prompt += "Add relevant emojis in the response where suitable. Include helpful lifestyle recommendation in your answer.\n"
+    elif is_healthy_habits_question(user_input):
+        combined_prompt += "🏋️‍♂️ You are a helpful and friendly medical assistant 🤖. Use the UserInformation and context below to answer the user's question clearly and accurately with a positive tone. \n"
+        combined_prompt += "Use the context to provide a personalized response.\n"
+        combined_prompt += "Add relevant emojis in the response where suitable. Include helpful lifestyle recommendation in your answer.\n"
     # Add user query to the combined prompt
-    # combined_prompt += f"\nUser Query: {user_input}"
+    # else:
+    #     fallback_message = random.choice(FALLBACK_RESPONSES)
+    #     return {"answer": fallback_message}
+    combined_prompt += f"\nUser Query: {user_input}"
 
     # Pass the combined prompt to the RAG pipeline for further suggestions
     response = await rag_pipeline_async(user_input, combined_prompt, csv_path, csv_path_exercise)
@@ -405,36 +560,28 @@ def is_risk_question(user_query):
 
 def is_diabetes_self_assessment(user_query):
     diabetes_self_assessment_keywords = [
-        "my", "diabetes risk assessment", "diabetes self-assessment","am I","my",
-        "do I" ,"how do I", "how am I"   ]
+         "diabetes risk assessment", "my diabetes risk", "am I at risk for diabetes",
+         "diabetes risk test", "diabetes risk questionnaire"
+         ]
     user_query_lower = user_query.lower()
     return any(keyword in user_query_lower for keyword in diabetes_self_assessment_keywords)
+
 def is_heart_self_assessment(user_query):
     heart_self_assessment_keywords = [
-        "my heart risk assessment", "my heart disease risk test", "heart self-assessment",
-        "my heart screening", "my heart risk score",
-        "my heart risk", "my heart risk calculator", "my heart risk evaluation",
-        "what is my heart risk profile", "do I have heart disease", "am I at risk for heart disease",
-        "my heart risk factors", "predict my heart risk", "check my heart risk",
-        "my heart risk questionnaire"
+         "heart risk assessment", "my heart risk", "am I at risk for heart disease",
+         "heart disease risk test", "heart disease risk questionnaire", "heart disease risk calculator"
     ]
     user_query_lower = user_query.lower()
     return any(keyword in user_query_lower for keyword in heart_self_assessment_keywords)
 def is_exercise_question(user_query):
     exercise_keywords = [
-        "my exercise", "my workout", "fitness plan for me", "my training", "my physical activity",
-        "my cardio", "strength training", "aerobic exercise", "yoga", "pilates",
-        "my fitness routine", "exercise recommendations", "exercise tips",
-        "exercise plan", "exercise benefits", "exercise for health",
-        "exercise for diabetes", "exercise for heart health", "exercise for weight loss",
-        "exercise for mental health", "exercise for stress relief", "exercise for seniors",
-        "exercise for beginners", "exercise for flexibility", "exercise for strength"
+        "exercise recommendations" 
     ]
     user_query_lower = user_query.lower()
     return any(keyword in user_query_lower for keyword in exercise_keywords)
 def is_healthy_habits_question(user_query):
     healthy_habits_keywords = [
-        "healthy habits for me", "lifestyle changes for me", "nutrition for me", 
+        "healthy habits", "lifestyle changes", "nutrition", 
         "wellness", "self-care", "mental health", "stress management for me",
         "my diet", "healthy eating", "healthy lifestyle", "healthy choices for me",
         "healthy living", "healthy recipes", "healthy meal plan","my nutrition","my eating habits",
@@ -442,6 +589,14 @@ def is_healthy_habits_question(user_query):
     ]
     user_query_lower = user_query.lower()
     return any(keyword in user_query_lower for keyword in healthy_habits_keywords)
+def is_analyze_user_total_health(user_query):
+    analyze_user_total_health_keywords = [
+        "analyze my total health", "analyze my health", "analyze my profile",
+        "analyze my data", "analyze my lifestyle", "analyze my habits",
+        "analyze my health data", "analyze my health profile"
+    ]
+    user_query_lower = user_query.lower()
+    return any(keyword in user_query_lower for keyword in analyze_user_total_health_keywords)
 
 # Asynchronous RAG pipeline
 async def rag_pipeline_async(user_query, combined_prompt, diabetes_heart_filepath, exercise_filepath, threshold=0.75):
@@ -464,7 +619,7 @@ async def rag_pipeline_async(user_query, combined_prompt, diabetes_heart_filepat
         response = await generate_response_rag_async(user_query, combined_prompt, top_match_df_exercise)
     else:
         response = random.choice(FALLBACK_RESPONSES)
-
+        return {"answer": response}
     return response
 
 def form_user_info_prompt(user_info: pd.DataFrame) -> str:
@@ -482,7 +637,7 @@ def form_user_info_prompt(user_info: pd.DataFrame) -> str:
 
     # Form the prompt
     prompt = (
-        f"You are a helpful and friendly medical assistant 🤖. The user is asking about personal health risk. Use the UserInformation and context below to answer the user's question clearly and accurately with a positive tone.\n"
+        # f"You are a helpful and friendly medical assistant 🤖. The user is asking about personal health risk. Use the UserInformation and context below to answer the user's question clearly and accurately with a positive tone.\n"
         f"UserInformation:\n"
         f"- High Blood Pressure: {user_data['HighBP']}\n"
         f"- High Cholesterol: {user_data['HighChol']}\n"
@@ -521,7 +676,7 @@ def form_heart_disease_prompt(user_info: pd.DataFrame) -> str:
 
     # Form the prompt
     prompt = (
-        f"You are a helpful and friendly medical assistant 🤖. The user is asking about personal health risk. Use the UserInformation and context below to answer the user's question clearly and accurately with a positive tone.\n"
+        # f"You are a helpful and friendly medical assistant 🤖. The user is asking about personal health risk. Use the UserInformation and context below to answer the user's question clearly and accurately with a positive tone.\n"
         f"UserInformation:\n"
         f"- Age: {user_data['age']}\n"
         f"- Height: {user_data['height']} cm\n"
