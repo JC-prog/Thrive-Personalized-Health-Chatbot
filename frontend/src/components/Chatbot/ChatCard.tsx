@@ -21,26 +21,6 @@ let allQuestions: { question: string; intent: string }[] = [];
 
 //   return response.json(); // Return JSON response
 // };
-import nlp from "compromise";
-
-// Global variable to store questions
-let allQuestions: { question: string; intent: string }[] = [];
-
-// export const sendMessage = async (message: string) => {
-//   const response = await fetch("../../api/chat-api", {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify({ message }),
-//   });
-
-//   if (!response.ok) {
-//     throw new Error("Failed to fetch response from the server.");
-//   }
-
-//   return response.json(); // Return JSON response
-// };
 
 const ChatCard = () => {
   const [messages, setMessages] = useState<{ text: string; type: "user" | "bot" }[]>([

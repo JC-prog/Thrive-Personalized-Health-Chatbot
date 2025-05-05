@@ -13,6 +13,7 @@ from app.prediction_models.diabetes_prediction import DiabetesRiskPredictor
 from pydantic import BaseModel
 from typing import Dict, Any
 import random
+import joblib
 
 class ChatResponse(BaseModel):
     answer: str  # The main answer from the chatbot
