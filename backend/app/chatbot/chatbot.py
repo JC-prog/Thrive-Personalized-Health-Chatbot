@@ -62,7 +62,8 @@ def initialize_user_profile(age=None, gender=None, height=None, weight=None,
         profile = {
             "demographics": {
                 "age": age if age is not None else 40,
-                "gender": gender.lower() if gender is not None else "not specified"
+                # "gender": gender.lower() if gender is not None else "not specified"
+                "gender": "female" if gender == 0 else "male" if gender == 1 else "not specified"
             },
             "body_metrics": {
                 "height": height if height is not None else 170.0,  # cm
@@ -679,19 +680,39 @@ def form_heart_disease_prompt(user_info: pd.DataFrame) -> str:
         # f"You are a helpful and friendly medical assistant 🤖. The user is asking about personal health risk. Use the UserInformation and context below to answer the user's question clearly and accurately with a positive tone.\n"
         f"UserInformation:\n"
         f"- Age: {user_data['age']}\n"
-        f"- Height: {user_data['height']} cm\n"
+        # f"- Height: {user_data['height']} cm\n"
         f"- Weight: {user_data['weight']} kg\n"
-        f"- Gender: {'Male' if user_data['gender'] == 1 else 'Female'}\n"
+        # f"- Gender: {'Male' if user_data['gender'] == 1 else 'Female'}\n"
         f"- Systolic Blood Pressure (ap_hi): {user_data['ap_hi']}\n"
         f"- Diastolic Blood Pressure (ap_lo): {user_data['ap_lo']}\n"
-        f"- Cholesterol Level: {user_data['cholesterol']}\n"
-        f"- Glucose Level: {user_data['gluc']}\n"
-        f"- Smoker: {user_data['smoke']}\n"
-        f"- Alcohol Consumption: {user_data['alco']}\n"
-        f"- Physically Active: {user_data['active']}\n"
-        f"- BMI Category: {user_data['BMI']}\n"
-        f"- Blood Pressure Category: {user_data['BP']}\n"
+        f"- Body Mass Index (BMI): {user_data['BMI_0']:.2f}\n"
+        f"- Body Mass Index Category: {user_data['BMI_1']}\n"
+        f"- Blood Pressure Category: {user_data['BP_1']}\n"
+        f"- Blood Pressure Category: {user_data['BP_2']}\n"
+        f"- Blood Pressure Category: {user_data['BP_3']}\n"
+        f"- Cholesterol Level: {user_data['cholesterol_0']}\n"
+        f"- Cholesterol Level: {user_data['cholesterol_2']}\n"
+        f"- Glucose Level: {user_data['gluc_0']}\n"
+        # f"- Smoker: {user_data['smoke']}\n"
+        # f"- Alcohol Consumption: {user_data['alco']}\n"
+        # f"- Physically Active: {user_data['active']}\n"
+        # f"- BMI Category: {user_data['BMI']}\n"
+        # f"- Blood Pressure Category: {user_data['BP']}\n"
     )
+    # data = {
+    #         "age": general.age,
+    #         "weight": clinical.weight,
+    #         "ap_hi": clinical.systolic_bp,
+    #         "ap_lo": clinical.diastolic_bp,
+    #         "BMI_0": BMI_0,
+    #         'BMI_1': BMI_1,
+    #         "BP_1": BP_1,
+    #         "BP_2": BP_2,
+    #         "BP_3": BP_3,
+    #         'cholesterol_0': cholesterol_0,
+    #         'cholesterol_2': cholesterol_2,
+    #         'gluc_0': gluc_0
+    #     }
 
     return prompt
 
