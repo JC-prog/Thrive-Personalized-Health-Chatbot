@@ -1,3 +1,5 @@
+# Section 1: Project Title
+
 # Thrive: Diabetes & Heart Diagnosis and Recommendation System
 
 ## Section 2: Executive Summary
@@ -55,7 +57,7 @@ npm install
 ```bash
 cd backend
 python -m venv venv-310
-.env\Scriptsctivate      
+.venv\Scripts\activate      
 pip install -r requirements.txt
 ```
 
