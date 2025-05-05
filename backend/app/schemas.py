@@ -1,7 +1,7 @@
 from pydantic import BaseModel, EmailStr,  conint, confloat, constr
 from typing import Optional, Dict
 from datetime import datetime
-
+from typing import Dict, Any
 # User Registration Input
 class UserRegisterInput(BaseModel):
     username: str
@@ -105,6 +105,10 @@ class ChatRequest(BaseModel):
 
 class ChatResponse(BaseModel):
     response: str
+
+class ChatResponseJSON(BaseModel):
+    answer: str  # The main answer from the chatbot
+    additional_data: Optional[Dict[str, Any]] = None  # Optional field for additional JSON data
 
 # User Information
 class UserProfileGeneralDataOut(BaseModel):

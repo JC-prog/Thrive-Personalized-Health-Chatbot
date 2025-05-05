@@ -6,10 +6,16 @@ from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from fastapi.middleware.cors import CORSMiddleware
 from . import models, schemas, crud, database, auth
-from app.chatbot.chatbot import generate_response, generate_response_openai
-from app.schemas import ChatRequest, ChatResponse, UserRiskScore
+from app.chatbot.chatbot import generate_response_openai_async
+from app.schemas import ChatRequest, UserRiskScore, ChatResponseJSON
 from app.prediction_models.heart_prediction import HeartRiskPredictor
 from app.prediction_models.diabetes_prediction import DiabetesRiskPredictor
+from pydantic import BaseModel
+from typing import Dict, Any
+
+class ChatResponse(BaseModel):
+    answer: str  # The main answer from the chatbot
+    additional_data: Dict[str, Any] = None  # Optional field for any additional JSON data
 
 app = FastAPI()
 
@@ -131,18 +137,38 @@ def get_user_profile(token: str = Depends(oauth2_scheme), db: Session = Depends(
     return user
 
 # Chat API
-@app.post("/chat", response_model=ChatResponse)
+@app.post("/chat", response_model=schemas.ChatResponseJSON)
 async def chat(request: ChatRequest, token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+    """
+    Chat API endpoint to handle a JSON reply with a single key 'answer'.
+    """
+    # Decode the token to get the user payload
     payload = auth.decode_token(token)
     if payload is None:
-        raise HTTPException(status_code=401, detail="Oops, Invalid token error happens!")
+        raise HTTPException(status_code=401, detail="Invalid token")
     
     username = payload.get("sub")
+    if not username:
+        raise HTTPException(status_code=401, detail="Token does not contain a valid username")
 
+    # Retrieve the user from the database
     user = crud.get_user_by_username(db, username)
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
 
-    reply = generate_response_openai(user.id, request.message, db, diabetes_model, heart_model)
-    return ChatResponse(response=reply)
+    # Generate the chatbot response
+    try:
+        reply = await generate_response_openai_async(user.id, request.message, db, diabetes_model, heart_model)
+        if reply is None:
+            raise HTTPException(status_code=500, detail="Error generating response")
+        
+        # Ensure the reply contains the expected 'answer' key
+        if isinstance(reply, dict) and "answer" in reply:
+            return ChatResponseJSON(answer=reply["answer"], additional_data=reply.get("additional_data"))
+        else:
+            raise HTTPException(status_code=500, detail="Invalid response format from chatbot")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
 
 # Get Historical Risk Score
 @app.get("/risk-score", response_model=UserRiskScore)
