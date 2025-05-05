@@ -2301,7 +2301,7 @@ def get_exercise_plan_summary(plan: dict):
         The exercise plan to summarize.
     """
     # Print the summary
-    plan_summary = GuidelineBasedExercisePlanGenerator.get_plan_summary(plan)
+    plan_summary = GuidelineBasedExercisePlanGenerator.get_plan_summary (plan)
     return plan_summary
 
 # Assuming SAMPLE_USER_PROFILE from ipython-input-6-661abb05d396 is the intended user profile

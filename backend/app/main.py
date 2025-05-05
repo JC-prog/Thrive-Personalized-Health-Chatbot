@@ -12,6 +12,7 @@ from app.prediction_models.heart_prediction import HeartRiskPredictor
 from app.prediction_models.diabetes_prediction import DiabetesRiskPredictor
 from pydantic import BaseModel
 from typing import Dict, Any
+import random
 
 class ChatResponse(BaseModel):
     answer: str  # The main answer from the chatbot
@@ -168,7 +169,18 @@ async def chat(request: ChatRequest, token: str = Depends(oauth2_scheme), db: Se
         else:
             raise HTTPException(status_code=500, detail="Invalid response format from chatbot")
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
+        # Log the exception (optional)
+        print(f"Error in chat endpoint: {str(e)}")
+
+        # Return a fallback message
+        fallback_message = random.choice([
+            "I’m sorry, I don’t have enough information on that topic. Try rephrasing your question with heart, diabetes, or healthy habits in mind!",
+            "I’m not sure about that. Can you ask something else related to heart health or diabetes?",
+            "I’m still learning! Please ask me something about heart health or diabetes."
+        ])
+        # fallback_message = "I’m sorry, I don’t have enough information on that topic. Try rephrasing your question with heart, diabetes, or healthy habits in mind!"
+        return ChatResponseJSON(answer=fallback_message, additional_data=None)
+        # raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
 
 # Get Historical Risk Score
 @app.get("/risk-score", response_model=UserRiskScore)

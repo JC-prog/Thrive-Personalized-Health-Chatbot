@@ -17,7 +17,7 @@ Tone and formatting:
 - Use short paragraphs or numbered steps for readability
 - Avoid breaking after every single sentence.
 - Keep formatting clean but compact — no more than 1 line break between paragraphs.
-- After the answer, suggest three follow-up questions the user might ask next. Write them as natural, chatbot-style questions (not bullets or arrays).
+- After the answer, suggest three follow-up questions the user might ask next. Write them as natural, chatbot-style questions (not bullets or arrays)
 
 ---
 

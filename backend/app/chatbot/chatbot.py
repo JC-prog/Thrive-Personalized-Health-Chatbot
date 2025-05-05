@@ -6,7 +6,8 @@ from .models.distilbert import get_embedding
 from .models.utils import cosine_similarity
 from app.prediction_models.diabetes_prediction import DiabetesRiskPredictor
 from app.prediction_models.heart_prediction import HeartRiskPredictor
-from app.chatbot.exercise_recommendation_v4_7 import generate_exercise_plan,print_exercise_plan_summary,get_exercise_plan_summary
+# from app.chatbot.exercise_recommendation_v4_7 import get_exercise_plan_summary,generate_exercise_plan
+from app.chatbot.updated_exercise_recommendation_v4_7 import create_guidelines_graph,get_exercise_plan_summary
 from app.models import UserGeneralData, UserClinicalMeasurement, UserLifeStyleInformation, UserMedicalHistory, UserHealthScore, UserDiabetesPredictionHistory
 
 import numpy as np
@@ -148,6 +149,31 @@ async def generate_response_openai_async(user_id: int, user_input: str, db, diab
             heart_prompt = form_heart_disease_prompt(heart_user_info)
             combined_prompt += f"""{heart_prompt}\n\nUser Heart Disease Risk Score is: {heart_risk_score * 100:.2f}%. 
             Add relevant emojis in the response where suitable. Include helpful lifestyle recommendation in your answer.\n"""
+    elif is_analyze_user_total_health(user_input):
+            heart_predictor = HeartRiskPredictor(db, heart_model)
+            heart_risk_score, heart_user_info = heart_predictor.predict_with_details(user_id)
+
+            # Handle missing user info
+            if heart_user_info is None:
+                print("⚠️ Warning: Unable to retrieve user information for heart disease prediction.")
+                combined_prompt += "⚠️ Unable to process your heart disease self-assessment due to incomplete or invalid data. Please ensure your profile is complete.\n"
+            else:
+                # Form the prompt with user info
+                heart_prompt = form_heart_disease_prompt(heart_user_info)
+                combined_prompt += f"""{heart_prompt}\n\nUser Heart Disease Risk Score is: {heart_risk_score * 100:.2f}%. 
+                Add relevant emojis in the response where suitable. Include helpful lifestyle recommendation in your answer.\n"""
+            diabetes_predictor = DiabetesRiskPredictor(db, diabetes_model)
+            diabetes_risk_score, diabetes_user_info = diabetes_predictor.predict_with_details(user_id)
+
+            # Handle missing user info
+            if diabetes_user_info is None:
+                print("⚠️ Warning: Unable to retrieve user information for diabetes prediction.")
+                combined_prompt += "⚠️ Unable to process your diabetes self-assessment due to incomplete or invalid data. Please ensure your profile is complete.\n"
+            else:
+                # Form the prompt with user info
+                diabetes_prompt = form_user_info_prompt(diabetes_user_info)
+                combined_prompt += f"""{diabetes_prompt}\n\nUser Diabetes Risk Score is: {diabetes_risk_score * 100:.2f}%.\n
+                Add relevant emojis in the response where suitable. Include helpful lifestyle recommendation in your answer.\n"""    
     elif is_exercise_question(user_input):
         print("Exercise Intent")
         # This will return the exercise plan based on the user profile
@@ -181,8 +207,12 @@ async def generate_response_openai_async(user_id: int, user_input: str, db, diab
         )
         exercise_dataset_path = csv_path_exercise_dataset# "path/to/combined_exercise_dataset.csv"
 
-        plan = generate_exercise_plan(USER_PROFILE, exercise_dataset_path)
-        exercise_plan_result = get_exercise_plan_summary(plan)
+        # plan = generate_exercise_plan(USER_PROFILE, exercise_dataset_path)
+        # exercise_plan_result = get_exercise_plan_summary(plan)
+
+        # graph = create_guidelines_graph(plan, exercise_dataset_path)
+        exercise_plan_result = get_exercise_plan_summary(USER_PROFILE)
+
         try:
             parsed = json.loads(exercise_plan_result)
             answer = parsed.get("answer", "")        
@@ -199,6 +229,9 @@ async def generate_response_openai_async(user_id: int, user_input: str, db, diab
         combined_prompt += "Use the context to provide a personalized response.\n"
         combined_prompt += "Add relevant emojis in the response where suitable. Include helpful lifestyle recommendation in your answer.\n"
     # Add user query to the combined prompt
+    # else:
+    #     fallback_message = random.choice(FALLBACK_RESPONSES)
+    #     return {"answer": fallback_message}
     combined_prompt += f"\nUser Query: {user_input}"
 
     # Pass the combined prompt to the RAG pipeline for further suggestions
@@ -527,14 +560,16 @@ def is_risk_question(user_query):
 
 def is_diabetes_self_assessment(user_query):
     diabetes_self_assessment_keywords = [
-         "diabetes risk assessment"
+         "diabetes risk assessment", "my diabetes risk", "am I at risk for diabetes",
+         "diabetes risk test", "diabetes risk questionnaire"
          ]
     user_query_lower = user_query.lower()
     return any(keyword in user_query_lower for keyword in diabetes_self_assessment_keywords)
 
 def is_heart_self_assessment(user_query):
     heart_self_assessment_keywords = [
-         "heart risk assessment"
+         "heart risk assessment", "my heart risk", "am I at risk for heart disease",
+         "heart disease risk test", "heart disease risk questionnaire", "heart disease risk calculator"
     ]
     user_query_lower = user_query.lower()
     return any(keyword in user_query_lower for keyword in heart_self_assessment_keywords)
@@ -554,6 +589,14 @@ def is_healthy_habits_question(user_query):
     ]
     user_query_lower = user_query.lower()
     return any(keyword in user_query_lower for keyword in healthy_habits_keywords)
+def is_analyze_user_total_health(user_query):
+    analyze_user_total_health_keywords = [
+        "analyze my total health", "analyze my health", "analyze my profile",
+        "analyze my data", "analyze my lifestyle", "analyze my habits",
+        "analyze my health data", "analyze my health profile"
+    ]
+    user_query_lower = user_query.lower()
+    return any(keyword in user_query_lower for keyword in analyze_user_total_health_keywords)
 
 # Asynchronous RAG pipeline
 async def rag_pipeline_async(user_query, combined_prompt, diabetes_heart_filepath, exercise_filepath, threshold=0.75):
@@ -576,7 +619,7 @@ async def rag_pipeline_async(user_query, combined_prompt, diabetes_heart_filepat
         response = await generate_response_rag_async(user_query, combined_prompt, top_match_df_exercise)
     else:
         response = random.choice(FALLBACK_RESPONSES)
-
+        return {"answer": response}
     return response
 
 def form_user_info_prompt(user_info: pd.DataFrame) -> str:
