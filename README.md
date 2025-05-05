@@ -10,12 +10,12 @@ Built with a React frontend for seamless user interaction and a FastAPI backend 
 
 ## Section 3: Project Contribution
 
-| Full Name              | Student ID  | Work Items     | Email           |
-|------------------------|-------------|----------------|-----------------|
-| Ye Htut                | A0315376B   | _To be filled_ | _To be filled_  |
-| Chong Loh Loy Fatt     | A0314461M   | _To be filled_ | _To be filled_  |
-| Loke Yuen Ying, Jodie  | A0310555M   | _To be filled_ | _To be filled_  |
-| Wang Ze Yu             | A0126110A   | _To be filled_ | _To be filled_  |
+| Full Name              | Student ID  | Work Items                                                                         | Email              |
+|------------------------|-------------|------------------------------------------------------------------------------------|--------------------|
+| Ye Htut                | A0315376B   | Diabetes Model Training, Chatbot Feature Development                               | _To be filled_     |
+| Chong Loh Loy Fatt     | A0314461M   | System Design and App Integration and Development                                  | 1503303@u.nus.edu  |
+| Loke Yuen Ying, Jodie  | A0310555M   | Exercise Recommender Feature Development                                           | _To be filled_     |
+| Wang Ze Yu             | A0126110A   | Heart Disease Risk Model Training, Finetuning and Prediction Class Development     | _To be filled_     |
 
 ## Section 4: System Demo
 
