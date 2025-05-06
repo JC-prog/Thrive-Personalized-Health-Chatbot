@@ -12,7 +12,7 @@ Built with a React frontend for seamless user interaction and a FastAPI backend 
 
 | Full Name              | Student ID  | Work Items                                                                         | Email                |
 |------------------------|-------------|------------------------------------------------------------------------------------|----------------------|
-| Ye Htut                | A0315376B   | Diabetes Model Training, Chatbot Feature Development                               | _To be filled_       |
+| Ye Htut                | A0315376B   | Diabetes Model Training, Chatbot Feature Development                               | e1509815@u.nus.edu      |
 | Chong Loh Loy Fatt     | A0314461M   | System Design and App Integration and Development                                  | e1503303@u.nus.edu   |
 | Loke Yuen Ying, Jodie  | A0310555M   | Exercise Recommender Feature Development                                           | e1458976@u.nus.edu   |
 | Wang Ze Yu             | A0126110A   | Heart Disease Risk Model Training, Finetuning and Prediction Class Development     | e1512194@u.nus.edu   |
